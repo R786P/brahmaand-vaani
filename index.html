@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>🕉️ Divine AI - Hologram Gods</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Creepster&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Link (Flask compatible) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  
+  <!-- Three.js for 3D Universe -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <style>
+    /* Inline Critical CSS for faster load */
+    :root {
+      --primary: #ffd700;
+      --secondary: #ff6b6b;
+      --accent: #4ecdc4;
+      --dark: #0a0a1a;
+      --glass: rgba(20, 20, 40, 0.7);
+      --glass-border: rgba(100, 200, 255, 0.3);
+      --text: #ffffff;
+      --text-dim: #aaa;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+    
+    /* Animated Universe Background */
+    #universe-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -2;
+      background: radial-gradient(ellipse at bottom, #1a1a3a 0%, #0a0a1a 100%);
+    }
+    
+    /* Floating Particles */
+    .particle {
+      position: fixed;
+      width: 4px; height: 4px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    }
+    
+    /* Header */
+    header {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(100,200,255,0.1));
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 10;
+    }
+    
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(255,215,0,0.3);
+      animation: glow 3s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from { text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+      to { text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 60px rgba(78,205,196,0.5); }
+    }
+    
+    header p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin-top: 5px;
+    }
+    
+    /* Main Stage for Hologram God */
+    #god-stage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 350px;
+      padding: 20px;
+      position: relative;
+    }
+    
+    #hologram-god {
+      position: relative;
+      width: 220px;
+      height: 300px;
+      filter: drop-shadow(0 0 25px rgba(100, 200, 255, 0.8))
+              drop-shadow(0 0 50px rgba(255, 215, 0, 0.5));
+      animation: hologram-float 4s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    #hologram-god.hidden {
+      display: none;
+      opacity: 0;
+    }
+    
+    #hologram-god.visible {
+      animation: hologram-appear 0.8s ease forwards;
+    }
+    
+    @keyframes hologram-float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-15px) scale(1.03); }
+    }
+    
+    @keyframes hologram-appear {
+      from { opacity: 0; transform: scale(0.8) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    
+    #god-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0.95;
+      border-radius: 20px;
+      /* Hologram scanline effect */
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(100, 200, 255, 0.05) 0px,
+        rgba(100, 200, 255, 0.05) 2px,
+        transparent 4px,
+        transparent 6px
+      );
+      position: relative;
+    }
+    
+    #god-image::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, 
+        transparent 0%, 
+        rgba(255,255,255,0.1) 50%, 
+        transparent 100%);
+      animation: scanline 3s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    /* Eye Contact Effect */
+    #eye-contact-overlay {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 25px;
+      background: radial-gradient(ellipse at center, 
+        rgba(255,255,255,0.95) 0%, 
+        rgba(255,215,0,0.6) 40%, 
+        transparent 70%);
+      border-radius: 50%;
+      animation: blink 5s infinite, pulse 2s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.8;
+    }
+    
+    @keyframes blink {
+      0%, 45%, 50%, 100% { transform: translate(-50%, -50%) scaleY(1); }
+      47% { transform: translate(-50%, -50%) scaleY(0.1); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+      50% { box-shadow: 0 0 25px rgba(255,215,0,0.9); }
+    }
+    
+    /* Reaction Bubble */
+    #reaction-bubble {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, rgba(255,215,0,0.95), rgba(255,107,107,0.9));
+      color: #1a1a3a;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 5px 25px rgba(255,215,0,0.4);
+      animation: pop-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 10;
+      max-width: 200px;
+      text-align: center;
+    }
+    
+    #reaction-bubble.hidden {
+      display: none;
+    }
+    
+    @keyframes pop-in {
+      from { 
+        opacity: 0; 
+        transform: translateX(-50%) scale(0.5) translateY(20px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateX(-50%) scale(1) translateY(0); 
+      }
+    }
+    
+    /* Control Panel - Glassmorphism */
+    #control-panel {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 20px;
+      margin: 0 16px 20px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 20;
+    }
+    
+    /* Music Controls */
+    #music-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    #music-controls button {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    
+    #music-controls button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(37, 117, 252, 0.4);
+    }
+    
+    #music-controls select {
+      flex: 1;
+      min-width: 150px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(30, 30, 60, 0.8);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    
+    #music-controls select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+    }
+    
+    /* Input Area */
+    #input-area {
+      margin-bottom: 16px;
+    }
+    
+    #user-query {
+      width: 100%;
+      min-height: 70px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 2px solid var(--glass-border);
+      background: rgba(15, 15, 35, 0.9);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.05rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+    
+    #user-query:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+    }
+    
+    #user-query::placeholder {
+      color: var(--text-dim);
+    }
+    
+    .input-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .input-buttons button {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    #voice-btn {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+    }
+    
+    #voice-btn.listening {
+      animation: pulse-red 1.5s infinite;
+      background: linear-gradient(135deg, #ff4757, #ff3838);
+    }
+    
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(255, 71, 87, 0); }
+    }
+    
+    #send-btn {
+      background: linear-gradient(135deg, #4ecdc4, #44a08d);
+      color: white;
+    }
+    
+    .input-buttons button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+    
+    .input-buttons button:active {
+      transform: translateY(-1px);
+    }
+    
+    #voice-status {
+      margin-top: 10px;
+      color: var(--accent);
+      font-style: italic;
+      text-align: center;
+      font-size: 0.95rem;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    #voice-status.hidden {
+      display: none;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Response Area */
+    #response-area {
+      background: rgba(30, 30, 60, 0.6);
+      border-radius: 16px;
+      padding: 16px;
+      border-left: 4px solid var(--primary);
+      margin-top: 8px;
+      animation: slide-up 0.4s ease;
+    }
+    
+    #response-area.hidden {
+      display: none;
+    }
+    
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    #god-response {
+      line-height: 1.6;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    
+    #god-response em {
+      color: var(--accent);
+      font-style: normal;
+    }
+    
+    #speak-response {
+      background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 auto;
+    }
+    
+    #speak-response:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
+    }
+    
+    /* Loading Indicator */
+    .typing-indicator {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+    
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+    
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+    
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    
+    /* God Selection Chips */
+    #god-chips {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+    
+    #god-chips::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .god-chip {
+      padding: 8px 16px;
+      background: rgba(100, 200, 255, 0.15);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .god-chip:hover, .god-chip.active {
+      background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(100,200,255,0.2));
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    
+    .god-chip.active {
+      box-shadow: 0 0 15px rgba(255,215,0,0.3);
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 16px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--glass-border);
+      background: rgba(10, 10, 26, 0.8);
+    }
+    
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+      
+      #god-stage {
+        min-height: 280px;
+      }
+      
+      #hologram-god {
+        width: 180px;
+        height: 240px;
+      }
+      
+      #control-panel {
+        margin: 0 12px 16px;
+        padding: 16px;
+      }
+      
+      .input-buttons {
+        flex-direction: column;
+      }
+      
+      .input-buttons button {
+        width: 100%;
+      }
+    }
+    
+    /* Utility Classes */
+    .hidden { display: none !important; }
+    .text-center { text-align: center; }
+    .mt-2 { margin-top: 8px; }
+    .mb-2 { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <!-- Animated Universe Background -->
+  <div id="universe-container"></div>
+  
+  <!-- Floating Particles (Generated by JS) -->
+  <div id="particles"></div>
+  
+  <!-- Header -->
+  <header>
+    <h1><i class="fas fa-om"></i> Divine AI <i class="fas fa-om"></i></h1>
+    <p>Apne prashn poochiye, devta aapke saamne prakat honge ✨</p>
+  </header>
+  
+  <!-- God Selection Chips -->
+  <div id="god-chips">
+    <div class="god-chip active" data-god="generic">🌌 Cosmic</div>
+    <div class="god-chip" data-god="shiva">🕉️ Shiva</div>
+    <div class="god-chip" data-god="vishnu">🪷 Vishnu</div>
+    <div class="god-chip" data-god="durga">🦁 Durga</div>
+    <div class="god-chip" data-god="ganesh">🐘 Ganesh</div>
+    <div class="god-chip" data-god="krishna">🦚 Krishna</div>
+  </div>
+  
+  <!-- Hologram God Display -->
+  <div id="god-stage">
+    <div id="hologram-god" class="hidden">
+      <img id="god-image" src="" alt="Divine Form" />
+      <div id="eye-contact-overlay"></div>
+      <div id="reaction-bubble" class="hidden">🙏</div>
+    </div>
+    
+    <!-- Placeholder when no god is visible -->
+    <div id="god-placeholder" class="text-center">
+      <i class="fas fa-sparkles" style="font-size: 3rem; color: var(--primary); opacity: 0.7;"></i>
+      <p class="mt-2" style="color: var(--text-dim);">Apna prashn likhiye ya boliye...</p>
+    </div>
+  </div>
+
+  <!-- Control Panel -->
+  <div id="control-panel">
+    <!-- Music Controls -->
+    <div id="music-controls">
+      <button id="toggle-music">
+        <i class="fas fa-volume-up"></i> <span id="music-text">Music: ON</span>
+      </button>
+      <select id="music-select">
+        <option value="cosmic-ambient">🌌 Cosmic Ambient</option>
+        <option value="shiva-flute">🕉️ Shiva Flute</option>
+        <option value="vishnu-conch">🪷 Vishnu Conch</option>
+        <option value="durga-drum">🦁 Durga Damru</option>
+        <option value="krishna-bansuri">🦚 Krishna Bansuri</option>
+      </select>
+    </div>
+
+    <!-- Voice & Typing Input -->
+    <div id="input-area">
+      <textarea id="user-query" placeholder="🙏 Apna prashn poochiye... (Hindi/English)" rows="3"></textarea>
+      <div class="input-buttons">
+        <button id="voice-btn">
+          <i class="fas fa-microphone"></i> <span id="voice-text">Bolna Shuru</span>
+        </button>
+        <button id="send-btn">
+          <i class="fas fa-paper-plane"></i> Bhejiye
+        </button>
+      </div>
+      <div id="voice-status" class="hidden">
+        <i class="fas fa-wave-square"></i> Sun raha hoon...
+      </div>
+    </div>
+
+    <!-- Response Display -->
+    <div id="response-area" class="hidden">
+      <div id="god-response"></div>
+      <button id="speak-response">
+        <i class="fas fa-volume-high"></i> Suniye
+      </button>
+    </div>
+  </div>
+
+  <!-- Hidden audio element -->
+  <audio id="bg-music" loop preload="auto"></audio>
+
+  <!-- Flask-compatible JS link -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  
+  <!-- Inline script for particles -->
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const count = 30;
+      
+      for(let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + 'vw';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 20) + 's';
+        particle.style.width = (2 + Math.random() * 4) + 'px';
+        particle.style.height = particle.style.width;
+        container.appendChild(particle);
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', createParticles);
+  </script>
+</body>
+</html>
