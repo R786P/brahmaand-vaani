@@ -1,28 +1,23 @@
 import os
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, url_for
 from flask_cors import CORS
 from groq import Groq
 from dotenv import load_dotenv
 
-load_dotenv()  # Load .env variables
+load_dotenv()
 
-app = Flask(__name__, static_folder='static', template_folder='templates')
-CORS(app)  # Allow cross-origin requests
+# IMPORTANT: template_folder aur static_folder ko '' (empty) rakho root ke liye
+app = Flask(__name__, template_folder='', static_folder='')
+CORS(app)
 
-# Initialize Groq
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# --- Frontend Routes ---
+# Home Route
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# Serve static files explicitly if needed (optional but safe)
-@app.route('/static/<path:path>')
-def send_static(path):
-    return send_from_directory('static', path)
-
-# --- API Route ---
+# API Route
 @app.route('/api/chat', methods=['POST'])
 def chat():
     try:
@@ -47,6 +42,5 @@ def chat():
         return jsonify({"reply": f"Error: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    # Render needs 0.0.0.0 and dynamic port
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
