@@ -10,11 +10,11 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-# Root folder compatible
+# Root folder compatible Flask app
 app = Flask(__name__, static_folder='', template_folder='')
 CORS(app)
 
-# Initialize Groq
+# Initialize Groq client
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 @app.route('/')
@@ -24,7 +24,7 @@ def home():
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    logger.info(f"📁 Serving static: {filename}")
+    logger.info(f"📁 Serving static file: {filename}")
     return send_from_directory('', filename)
 
 @app.route('/api/chat', methods=['POST'])
@@ -32,8 +32,10 @@ def chat():
     logger.info("📨 POST /api/chat received")
     try:
         data = request.json
-        if not 
-            logger.warning("⚠️ No JSON data")
+        
+        # ✅ FIXED: Proper condition check
+        if not data:
+            logger.warning("⚠️ No JSON data in request")
             return jsonify({"reply": "❌ Invalid request format"}), 400
         
         message = data.get('message', '')
@@ -41,6 +43,7 @@ def chat():
         
         logger.info(f"💬 Query: {message[:50]}...")
         
+        # Call GROQ API
         completion = client.chat.completions.create(
             model="llama3-8b-8192",
             messages=[
