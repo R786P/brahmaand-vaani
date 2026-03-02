@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ब्रह्माण्ड वाणी — Divine Oracle</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:wght@300;400;600&display=swap');
+:root{--gold:#f5c842;--gold2:#e8a020;--divine:#fff8e7;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100vw;height:100vh;overflow:hidden;background:#000;color:var(--divine);font-family:'Crimson Pro',serif;}
+#cvs{position:fixed;inset:0;z-index:0;}
+.neb{position:fixed;border-radius:50%;filter:blur(100px);z-index:1;pointer-events:none;}
+.n1{width:800px;height:600px;background:radial-gradient(ellipse,rgba(90,0,180,0.5) 0%,transparent 70%);top:-20%;left:-20%;animation:nb 28s ease-in-out infinite alternate;}
+.n2{width:700px;height:700px;background:radial-gradient(ellipse,rgba(0,20,120,0.55) 0%,transparent 70%);bottom:-20%;right:-20%;animation:nb 35s ease-in-out infinite alternate-reverse;}
+.n3{width:400px;height:400px;background:radial-gradient(ellipse,rgba(180,0,50,0.35) 0%,transparent 70%);top:20%;right:10%;animation:nb 20s ease-in-out infinite alternate;}
+.n4{width:300px;height:300px;background:radial-gradient(ellipse,rgba(0,120,100,0.25) 0%,transparent 70%);bottom:20%;left:8%;animation:nb 24s ease-in-out infinite alternate-reverse;}
+@keyframes nb{0%{transform:translate(0,0) scale(1);}100%{transform:translate(50px,40px) scale(1.2);}}
+.gr{position:fixed;top:50%;left:50%;border-radius:50%;border:1px solid rgba(200,160,255,0.07);transform:translate(-50%,-50%) rotateX(72deg);animation:grot 70s linear infinite;z-index:1;pointer-events:none;}
+.gr:nth-child(1){width:1000px;height:1000px;}.gr:nth-child(2){width:720px;height:720px;border-color:rgba(150,220,255,0.05);animation-duration:50s;}.gr:nth-child(3){width:480px;height:480px;border-color:rgba(255,220,100,0.04);animation-duration:32s;}
+@keyframes grot{to{transform:translate(-50%,-50%) rotateX(72deg) rotateZ(360deg);}}
+
+/* TITLE */
+#tbar{position:fixed;top:22px;left:50%;transform:translateX(-50%);text-align:center;z-index:30;pointer-events:none;}
+#tbar h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(0.95rem,2.2vw,1.85rem);color:var(--gold);text-shadow:0 0 30px rgba(245,200,66,0.9),0 0 70px rgba(245,200,66,0.4);letter-spacing:5px;white-space:nowrap;}
+#tbar p{font-size:0.65rem;color:rgba(255,248,231,0.32);letter-spacing:9px;margin-top:3px;font-style:italic;}
+
+/* GEAR ICON */
+#gear{position:fixed;top:18px;left:18px;z-index:200;width:44px;height:44px;border-radius:50%;background:rgba(5,2,16,0.6);border:1px solid rgba(245,200,66,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.15rem;backdrop-filter:blur(10px);transition:all 0.3s;}
+#gear:hover{border-color:var(--gold);box-shadow:0 0 20px rgba(245,200,66,0.4);transform:rotate(30deg);}
+
+/* SETTINGS MODAL */
+#smod{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity 0.3s;}
+#smod.open{opacity:1;pointer-events:all;}
+#sbox{background:linear-gradient(135deg,rgba(8,3,25,0.97),rgba(30,8,70,0.95));border:1px solid rgba(245,200,66,0.25);border-radius:24px;padding:32px;width:min(360px,92vw);box-shadow:0 0 60px rgba(100,0,200,0.4);}
+#sbox h2{font-family:'Cinzel Decorative',cursive;font-size:0.85rem;color:var(--gold);letter-spacing:3px;text-align:center;margin-bottom:22px;}
+.sf{margin-bottom:16px;}
+.sf label{font-size:0.62rem;letter-spacing:2px;color:rgba(255,248,231,0.45);display:block;margin-bottom:6px;text-transform:uppercase;}
+.sf input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(245,200,66,0.18);border-radius:10px;padding:11px 14px;font-size:0.85rem;color:var(--divine);outline:none;font-family:'Crimson Pro',serif;transition:border-color 0.3s;}
+.sf input:focus{border-color:rgba(245,200,66,0.6);}
+.sf input::placeholder{color:rgba(255,248,231,0.18);font-size:0.75rem;}
+.sf small{font-size:0.6rem;color:rgba(255,248,231,0.3);margin-top:5px;display:block;line-height:1.6;}
+.sf small a{color:rgba(245,200,66,0.6);text-decoration:none;}
+#svbtn{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold2),var(--gold));border:none;border-radius:10px;color:#1a0800;font-family:'Cinzel Decorative',cursive;font-size:0.72rem;letter-spacing:2px;cursor:pointer;transition:all 0.3s;margin-top:4px;}
+#svbtn:hover{box-shadow:0 0 25px rgba(245,200,66,0.6);transform:scale(1.02);}
+#clsbtn{width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,248,231,0.4);font-size:0.8rem;cursor:pointer;margin-top:10px;transition:all 0.3s;}
+#clsbtn:hover{border-color:rgba(255,255,255,0.3);color:rgba(255,248,231,0.7);}
+
+/* GOD SELECTOR */
+#gpanel{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:8px;align-items:center;}
+#gpanel>span{font-size:0.52rem;letter-spacing:2px;color:rgba(245,200,66,0.5);text-transform:uppercase;writing-mode:vertical-rl;margin-bottom:4px;}
+.gb{width:50px;height:50px;border-radius:13px;border:1.5px solid rgba(245,200,66,0.2);background:rgba(5,2,16,0.65);cursor:pointer;transition:all 0.3s;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(10px);gap:1px;}
+.gb .gi{font-size:1.4rem;line-height:1;}.gb .gn{font-size:0.32rem;color:rgba(245,200,66,0.6);letter-spacing:0.5px;}
+.gb:hover,.gb.on{border-color:var(--gold);box-shadow:0 0 18px rgba(245,200,66,0.55),inset 0 0 18px rgba(245,200,66,0.08);transform:scale(1.08);background:rgba(15,6,40,0.85);}
+
+/* GOD SCENE */
+#gscene{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,94vw);height:68vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;opacity:0;transition:opacity 0.9s ease;pointer-events:none;z-index:20;}
+#gscene.vis{opacity:1;}
+
+/* Mandala */
+#mandala{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);width:320px;height:320px;opacity:0.15;animation:mspin 25s linear infinite;}
+@keyframes mspin{to{transform:translateX(-50%) rotate(360deg);}}
+
+/* Aura */
+#gaura{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;filter:blur(45px);animation:abreathe 3s ease-in-out infinite;}
+@keyframes abreathe{0%,100%{transform:translateX(-50%) scale(1);opacity:0.6;}50%{transform:translateX(-50%) scale(1.2);opacity:1;}}
+
+/* SVG wrap */
+#gwrap{position:relative;z-index:10;width:210px;height:270px;animation:ghover 5s ease-in-out infinite;margin-bottom:8px;filter:drop-shadow(0 0 40px rgba(245,200,66,0.65));transition:filter 0.5s;}
+@keyframes ghover{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+#gwrap.speaking{animation:ghover 5s ease-in-out infinite,gspk 0.4s ease-in-out infinite alternate;}
+@keyframes gspk{from{filter:drop-shadow(0 0 28px rgba(245,200,66,0.55));}to{filter:drop-shadow(0 0 70px rgba(245,200,66,1)) drop-shadow(0 0 20px #fff3);}}
+#gwrap.listening{animation:glis 0.65s ease-in-out infinite alternate;}
+@keyframes glis{from{transform:translateY(-8px) rotate(-4deg);filter:drop-shadow(0 0 28px rgba(100,210,255,0.8));}to{transform:translateY(-16px) rotate(4deg);filter:drop-shadow(0 0 55px rgba(100,210,255,1));}}
+
+#gname{font-family:'Cinzel Decorative',cursive;color:var(--gold);font-size:0.9rem;letter-spacing:5px;text-shadow:0 0 25px rgba(245,200,66,0.9);margin-bottom:8px;}
+
+/* Sound waves */
+#swaves{position:fixed;bottom:210px;left:50%;transform:translateX(-50%);pointer-events:none;}
+.sw{position:absolute;width:130px;height:130px;border-radius:50%;border:2px solid rgba(245,200,66,0.4);top:50%;left:50%;transform:translate(-50%,-50%) scale(0);opacity:0;}
+.sw.go{animation:swgo 2.3s ease-out forwards;}
+.sw:nth-child(2){animation-delay:0.38s;}.sw:nth-child(3){animation-delay:0.76s;}
+@keyframes swgo{0%{transform:translate(-50%,-50%) scale(0);opacity:0.85;}100%{transform:translate(-50%,-50%) scale(3.8);opacity:0;}}
+
+/* ANSWER BUBBLE */
+#awrap{position:fixed;bottom:165px;left:50%;transform:translateX(-50%) translateY(12px);width:min(510px,90vw);z-index:25;opacity:0;pointer-events:none;transition:opacity 0.5s,transform 0.5s;}
+#awrap.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#abox{background:linear-gradient(135deg,rgba(10,3,30,0.95),rgba(35,8,80,0.92));border:1px solid rgba(245,200,66,0.28);border-radius:22px;padding:18px 24px;text-align:center;font-size:1.02rem;line-height:1.8;backdrop-filter:blur(28px);box-shadow:0 8px 60px rgba(80,0,200,0.3);}
+#abox::after{content:'';position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);border:13px solid transparent;border-top-color:rgba(245,200,66,0.22);}
+#atxt{display:block;}
+#atxt.typing::after{content:'|';animation:blk 0.6s step-end infinite;color:var(--gold);}
+@keyframes blk{50%{opacity:0;}}
+
+/* STATUS */
+#status{position:fixed;bottom:118px;left:50%;transform:translateX(-50%);font-size:0.7rem;letter-spacing:3px;color:rgba(255,248,231,0.3);text-transform:uppercase;white-space:nowrap;z-index:25;transition:all 0.4s;}
+
+/* INPUT */
+#ibar{position:fixed;bottom:35px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;width:min(630px,90vw);z-index:30;}
+#qinp{flex:1;background:rgba(6,2,20,0.88);border:1px solid rgba(245,200,66,0.28);border-radius:50px;padding:15px 22px;font-size:1rem;font-family:'Crimson Pro',serif;color:var(--divine);outline:none;backdrop-filter:blur(22px);transition:all 0.35s;box-shadow:0 0 22px rgba(80,0,200,0.15);}
+#qinp:focus{border-color:rgba(245,200,66,0.65);box-shadow:0 0 35px rgba(245,200,66,0.2);}
+#qinp::placeholder{color:rgba(255,248,231,0.22);}
+.ib{width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;font-size:1.2rem;transition:all 0.3s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+#micb{background:linear-gradient(135deg,#120830,#380f70);border:1.5px solid rgba(245,200,66,0.28);box-shadow:0 0 18px rgba(100,0,200,0.35);position:relative;}
+#micb:hover{transform:scale(1.1);box-shadow:0 0 30px rgba(100,0,200,0.6);}
+#micb.on{background:linear-gradient(135deg,#001830,#004870);border-color:rgba(80,200,255,0.8);box-shadow:0 0 30px rgba(0,160,255,0.65);animation:mpulse 0.55s ease-in-out infinite alternate;}
+@keyframes mpulse{to{transform:scale(1.15);}}
+.mr{position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(80,200,255,0.3);animation:mring 1.1s ease-out infinite;display:none;}
+.mr:nth-child(2){inset:-13px;animation-delay:0.5s;}
+#micb.on .mr{display:block;}
+@keyframes mring{0%{transform:scale(1);opacity:0.7;}100%{transform:scale(1.5);opacity:0;}}
+#sndb{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a0800;box-shadow:0 0 22px rgba(245,200,66,0.4);}
+#sndb:hover{transform:scale(1.1);box-shadow:0 0 40px rgba(245,200,66,0.75);}
+#sndb:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+
+/* LOADER */
+#ldr{position:fixed;bottom:122px;left:50%;transform:translateX(-50%);display:none;gap:7px;z-index:26;}
+#ldr.show{display:flex;}
+.ld{width:9px;height:9px;border-radius:50%;background:var(--gold);opacity:0.25;animation:ldot 1.3s ease-in-out infinite;}
+.ld:nth-child(2){animation-delay:0.22s;}.ld:nth-child(3){animation-delay:0.44s;}
+@keyframes ldot{0%,100%{opacity:0.2;transform:scale(0.75);}50%{opacity:1;transform:scale(1.25);}}
+
+/* PARTICLES */
+.pt{position:fixed;border-radius:50%;pointer-events:none;z-index:50;animation:pf 1.7s ease-out forwards;}
+@keyframes pf{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
+
+/* TOAST */
+#toast{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.88);color:var(--divine);padding:10px 22px;border-radius:50px;font-size:0.8rem;z-index:300;opacity:0;transition:opacity 0.3s;border:1px solid rgba(245,200,66,0.2);white-space:nowrap;backdrop-filter:blur(12px);}
+#toast.show{opacity:1;}
+
+/* INTRO */
+#intro{position:fixed;inset:0;background:#000;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 1.6s;}
+#iom{font-size:5rem;animation:omg 2s ease-in-out infinite alternate;line-height:1;}
+@keyframes omg{from{filter:drop-shadow(0 0 15px rgba(245,200,66,0.4));}to{filter:drop-shadow(0 0 80px rgba(245,200,66,1));}}
+#intro h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.5rem,5vw,3.2rem);color:var(--gold);text-shadow:0 0 60px rgba(245,200,66,0.8);text-align:center;opacity:0;animation:iup 2s ease 0.8s forwards;}
+#intro p{color:rgba(255,248,231,0.45);letter-spacing:7px;font-size:0.82rem;text-align:center;opacity:0;animation:iup 2s ease 1.8s forwards;}
+#ibtn{margin-top:22px;padding:15px 50px;background:transparent;border:1.5px solid var(--gold);color:var(--gold);font-family:'Cinzel Decorative',cursive;font-size:0.85rem;letter-spacing:4px;cursor:pointer;border-radius:50px;transition:all 0.4s;opacity:0;animation:iup 2s ease 2.8s forwards;}
+#ibtn:hover{background:rgba(245,200,66,0.12);box-shadow:0 0 40px rgba(245,200,66,0.5);transform:scale(1.06);}
+@keyframes iup{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <div id="iom">🕉️</div>
+  <h1>ब्रह्माण्ड वाणी</h1>
+  <p>DIVINE ORACLE · COSMIC CONSCIOUSNESS</p>
+  <button id="ibtn" onclick="enter()">प्रवेश करें ✨</button>
+</div>
+
+<canvas id="cvs"></canvas>
+<div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div><div class="neb n4"></div>
+<div class="gr"></div><div class="gr"></div><div class="gr"></div>
+
+<div id="tbar"><h1>🕉️ ब्रह्माण्ड वाणी</h1><p>DIVINE ORACLE</p></div>
+
+<div id="gear" onclick="openS()" title="Settings">⚙️</div>
+
+<div id="smod">
+  <div id="sbox">
+    <h2>⚙️ DIVINE SETTINGS</h2>
+    <div class="sf">
+      <label>ElevenLabs API Key — Madhur Awaaz</label>
+      <input type="password" id="ekey" placeholder="sk_xxxxxxxxxxxxxxxx"/>
+      <small>Free: <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a> → Sign Up → Profile → API Key<br/>10,000 characters/month bilkul free! 🎁</small>
+    </div>
+    <button id="svbtn" onclick="saveS()">✨ DIVINE VOICE ACTIVATE</button>
+    <button id="clsbtn" onclick="closeS()">बंद करें ✕</button>
+  </div>
+</div>
+
+<div id="gpanel">
+  <span>देव चुनें</span>
+  <button class="gb on" id="g-shiva" onclick="chgod('shiva')"><span class="gi">🔱</span><span class="gn">SHIVA</span></button>
+  <button class="gb" id="g-krishna" onclick="chgod('krishna')"><span class="gi">🦚</span><span class="gn">KRISHNA</span></button>
+  <button class="gb" id="g-ganesh" onclick="chgod('ganesh')"><span class="gi">🐘</span><span class="gn">GANESH</span></button>
+  <button class="gb" id="g-durga" onclick="chgod('durga')"><span class="gi">⚔️</span><span class="gn">DURGA</span></button>
+  <button class="gb" id="g-vishnu" onclick="chgod('vishnu')"><span class="gi">🌊</span><span class="gn">VISHNU</span></button>
+  <button class="gb" id="g-brahma" onclick="chgod('brahma')"><span class="gi">✨</span><span class="gn">BRAHMA</span></button>
+</div>
+
+<div id="swaves"><div class="sw"></div><div class="sw"></div><div class="sw"></div></div>
+
+<div id="gscene">
+  <svg id="mandala" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="rgba(245,200,66,0.9)" stroke-width="0.5">
+      <circle cx="100" cy="100" r="95"/><circle cx="100" cy="100" r="78"/><circle cx="100" cy="100" r="62"/>
+      <circle cx="100" cy="100" r="46"/><circle cx="100" cy="100" r="30"/>
+      <line x1="100" y1="5" x2="100" y2="195"/><line x1="5" y1="100" x2="195" y2="100"/>
+      <line x1="30" y1="30" x2="170" y2="170"/><line x1="170" y1="30" x2="30" y2="170"/>
+      <polygon points="100,18 120,85 190,100 120,115 100,182 80,115 10,100 80,85" stroke="rgba(245,200,66,0.7)" fill="rgba(245,200,66,0.02)"/>
+      <polygon points="100,32 152,78 152,122 100,168 48,122 48,78" stroke="rgba(245,200,66,0.45)" fill="none"/>
+      <circle cx="100" cy="18" r="4.5" fill="rgba(245,200,66,0.7)"/><circle cx="100" cy="182" r="4.5" fill="rgba(245,200,66,0.7)"/>
+      <circle cx="18" cy="100" r="4.5" fill="rgba(245,200,66,0.7)"/><circle cx="182" cy="100" r="4.5" fill="rgba(245,200,66,0.7)"/>
+      <circle cx="40" cy="40" r="3" fill="rgba(245,200,66,0.55)"/><circle cx="160" cy="40" r="3" fill="rgba(245,200,66,0.55)"/>
+      <circle cx="40" cy="160" r="3" fill="rgba(245,200,66,0.55)"/><circle cx="160" cy="160" r="3" fill="rgba(245,200,66,0.55)"/>
+    </g>
+  </svg>
+  <div id="gaura"></div>
+  <div id="gwrap"></div>
+  <div id="gname">भगवान शिव</div>
+</div>
+
+<div id="awrap"><div id="abox"><span id="atxt"></span></div></div>
+<div id="ldr"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>
+<div id="status">प्रश्न पूछें — ब्रह्मांड सुन रहा है 🙏</div>
+
+<div id="ibar">
+  <button class="ib" id="micb" onclick="togMic()">🎤<div class="mr"></div><div class="mr"></div></button>
+  <input id="qinp" type="text" placeholder="अपना प्रश्न यहाँ लिखें या 🎤 से बोलें..." onkeydown="if(event.key==='Enter')ask()"/>
+  <button class="ib" id="sndb" onclick="ask()">⚡</button>
+</div>
+<div id="toast"></div>
+
+<script>
+// ══ STARS ══
+const cv=document.getElementById('cvs'),cx=cv.getContext('2d');
+let ST=[],SH=[];
+function rsz(){cv.width=innerWidth;cv.height=innerHeight;ST=[];for(let i=0;i<420;i++)ST.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.8+0.15,ph:Math.random()*6.28,sp:Math.random()*0.3+0.04,h:185+Math.random()*90,s:55+Math.random()*35,l:65+Math.random()*30});}
+window.addEventListener('resize',rsz);rsz();
+let T=0;
+(function loop(){cx.clearRect(0,0,cv.width,cv.height);T+=0.007;
+ST.forEach(s=>{const op=0.2+0.75*Math.abs(Math.sin(T*s.sp+s.ph));cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.28);cx.fillStyle=`hsla(${s.h},${s.s}%,${s.l}%,${op})`;cx.fill();});
+SH=SH.filter(s=>s.op>0.01);SH.forEach(s=>{const g=cx.createLinearGradient(s.x,s.y,s.x-Math.cos(s.a)*s.l,s.y-Math.sin(s.a)*s.l);g.addColorStop(0,`rgba(255,248,200,${s.op})`);g.addColorStop(1,'transparent');cx.beginPath();cx.moveTo(s.x,s.y);cx.lineTo(s.x-Math.cos(s.a)*s.l,s.y-Math.sin(s.a)*s.l);cx.strokeStyle=g;cx.lineWidth=2;cx.stroke();s.x+=Math.cos(s.a)*s.sp;s.y+=Math.sin(s.a)*s.sp;s.op-=0.012;});
+requestAnimationFrame(loop);})();
+setInterval(()=>SH.push({x:Math.random()*cv.width,y:Math.random()*cv.height*0.5,l:120+Math.random()*130,sp:5+Math.random()*8,op:1,a:Math.PI/4+Math.random()*0.5}),3200);
+
+// ══ MUSIC ══
+let aud=null;
+function startMusic(){
+  try{aud=new(window.AudioContext||window.webkitAudioContext)();
+  [[55,0],[82.4,0.018],[110,0],[165,0.012],[220,0]].forEach(([f,d],i)=>{const o=aud.createOscillator(),g=aud.createGain(),fl=aud.createBiquadFilter();o.type=i<2?'sine':'triangle';o.frequency.value=f+d*f;g.gain.setValueAtTime(0,aud.currentTime);g.gain.linearRampToValueAtTime(0.05/(i*0.4+1),aud.currentTime+5);fl.type='lowpass';fl.frequency.value=600;o.connect(fl);fl.connect(g);g.connect(aud.destination);o.start();});
+  function bell(){if(!aud)return;const f=[396,528,639,741,852][Math.floor(Math.random()*5)];const o=aud.createOscillator(),g=aud.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0.2,aud.currentTime);g.gain.exponentialRampToValueAtTime(0.001,aud.currentTime+6);o.connect(g);g.connect(aud.destination);o.start();o.stop(aud.currentTime+6);setTimeout(bell,5000+Math.random()*8000);}
+  setTimeout(bell,2500);}catch(e){}
+}
+
+// ══ GOD SVG FACES ══
+function svgShiva(ex,ey){return`<svg viewBox="0 0 220 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><radialGradient id="sf" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#8ab4ff"/><stop offset="55%" stop-color="#4466cc"/><stop offset="100%" stop-color="#1a2266"/></radialGradient><filter id="gl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M82 28 Q100 10 118 28 Q100 22 82 28" fill="#fffbe0" opacity="0.92"/>
+<path d="M107 32 Q113 55 107 78 Q102 95 107 108" stroke="#88ddff" stroke-width="3" fill="none" opacity="0.75" stroke-dasharray="4,3"/>
+<path d="M58 95 Q50 60 63 38 Q75 20 90 26 Q85 62 65 88" fill="#554433" opacity="0.95"/>
+<path d="M162 95 Q170 60 157 38 Q145 20 130 26 Q135 62 155 88" fill="#554433" opacity="0.95"/>
+<path d="M62 38 Q85 14 110 10 Q135 14 158 38" fill="#665544" opacity="0.88"/>
+<ellipse cx="110" cy="128" rx="63" ry="74" fill="url(#sf)"/>
+<ellipse cx="110" cy="96" rx="10" ry="6" fill="#ff3333" opacity="0.92" filter="url(#gl)"/>
+<ellipse cx="110" cy="96" rx="5.5" ry="3.5" fill="#ff8888"/>
+<rect x="108" y="82" width="4" height="11" rx="2" fill="white" opacity="0.85"/>
+<ellipse cx="${85+ex}" cy="${115+ey}" rx="12" ry="9.5" fill="white"/><ellipse cx="${85+ex}" cy="${115+ey}" rx="7.5" ry="7" fill="#223366"/><ellipse cx="${83+ex}" cy="${113+ey}" rx="3.2" ry="3.2" fill="#000"/><ellipse cx="${82+ex}" cy="${112+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<ellipse cx="${135+ex}" cy="${115+ey}" rx="12" ry="9.5" fill="white"/><ellipse cx="${135+ex}" cy="${115+ey}" rx="7.5" ry="7" fill="#223366"/><ellipse cx="${133+ex}" cy="${113+ey}" rx="3.2" ry="3.2" fill="#000"/><ellipse cx="${132+ex}" cy="${112+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<path d="M72 103 Q85 96 98 103" stroke="#112" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+<path d="M122 103 Q135 96 148 103" stroke="#112" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+<ellipse cx="110" cy="132" rx="5.5" ry="4.5" fill="rgba(0,0,0,0.18)"/>
+<path d="M103 134 Q110 140 117 134" stroke="#446" stroke-width="1.5" fill="none"/>
+<path d="M94 152 Q110 164 126 152" stroke="#334" stroke-width="2.8" fill="rgba(180,200,255,0.12)" stroke-linecap="round"/>
+<ellipse cx="110" cy="198" rx="32" ry="13" fill="#1a5577" opacity="0.75"/>
+<g fill="#6B3A1B">${[...Array(9)].map((_,i)=>`<circle cx="${70+i*10}" cy="188" r="5"/><circle cx="${70+i*10}" cy="188" r="2.8" fill="#8B5A2B"/>`).join('')}</g>
+<text x="104" y="218" font-size="20" fill="rgba(245,200,66,0.9)" text-anchor="middle" filter="url(#gl)">🔱</text>
+</svg>`;}
+
+function svgKrishna(ex,ey){return`<svg viewBox="0 0 220 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><radialGradient id="kf" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#7799ff"/><stop offset="55%" stop-color="#3355cc"/><stop offset="100%" stop-color="#112255"/></radialGradient><filter id="kgl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M72 35 Q90 8 110 18 Q90 20 72 35" fill="#00aa44" opacity="0.88"/>
+<path d="M148 35 Q130 8 110 18 Q130 20 148 35" fill="#00aa44" opacity="0.88"/>
+<ellipse cx="110" cy="18" rx="9" ry="13" fill="#0066bb"/><ellipse cx="110" cy="18" rx="5.5" ry="9" fill="#00aaff" opacity="0.8"/><ellipse cx="110" cy="17" rx="2.8" ry="4.5" fill="#004488"/>
+<path d="M63 68 Q110 42 157 68 L153 82 Q110 58 67 82 Z" fill="#f5c842" opacity="0.95"/>
+<ellipse cx="110" cy="54" rx="7" ry="9.5" fill="#ff4488" opacity="0.9" filter="url(#kgl)"/>
+<circle cx="86" cy="62" r="4" fill="#ff2266"/><circle cx="134" cy="62" r="4" fill="#ff2266"/>
+<ellipse cx="110" cy="130" rx="62" ry="70" fill="url(#kf)"/>
+<ellipse cx="110" cy="96" rx="6" ry="8" fill="#ffdd00" opacity="0.88" filter="url(#kgl)"/>
+<path d="M${73+ex} ${115+ey} Q${88+ex} ${104+ey} ${103+ex} ${115+ey} Q${88+ex} ${124+ey} ${73+ex} ${115+ey}" fill="white"/>
+<ellipse cx="${88+ex}" cy="${115+ey}" rx="7.5" ry="7" fill="#2233aa"/><ellipse cx="${86+ex}" cy="${113+ey}" rx="3.2" ry="3.2" fill="#000"/><ellipse cx="${85+ex}" cy="${112+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<path d="M${117+ex} ${115+ey} Q${132+ex} ${104+ey} ${147+ex} ${115+ey} Q${132+ex} ${124+ey} ${117+ex} ${115+ey}" fill="white"/>
+<ellipse cx="${132+ex}" cy="${115+ey}" rx="7.5" ry="7" fill="#2233aa"/><ellipse cx="${130+ex}" cy="${113+ey}" rx="3.2" ry="3.2" fill="#000"/><ellipse cx="${129+ex}" cy="${112+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<path d="M72 103 Q88 94 103 102" stroke="#112" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M117 102 Q132 94 148 103" stroke="#112" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M72 116 Q88 124 103 116" stroke="#001" stroke-width="1.2" fill="none" opacity="0.4"/>
+<path d="M117 116 Q132 124 148 116" stroke="#001" stroke-width="1.2" fill="none" opacity="0.4"/>
+<path d="M102 133 Q110 139 118 133" stroke="#335" stroke-width="1.5" fill="none"/>
+<path d="M93 154 Q110 167 127 154" stroke="#112266" stroke-width="2.8" fill="rgba(100,130,255,0.12)" stroke-linecap="round"/>
+<path d="M93 155 Q110 150 127 155" stroke="#112266" stroke-width="1.2" fill="none"/>
+${[...Array(10)].map((_,i)=>`<circle cx="${66+i*10}" cy="${186+Math.sin(i)*4}" r="5.5" fill="${['#ff4466','#ffaa00','#ff6622','#ffdd00','#ff88aa'][i%5]}" opacity="0.85"/>`).join('')}
+<rect x="148" y="162" width="3.5" height="42" rx="1.5" fill="#8B6914" opacity="0.7" transform="rotate(-18 148 162)"/>
+</svg>`;}
+
+function svgGanesh(ex,ey){return`<svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><radialGradient id="gf" cx="50%" cy="45%" r="60%"><stop offset="0%" stop-color="#ffcc88"/><stop offset="60%" stop-color="#dd9944"/><stop offset="100%" stop-color="#8B5800"/></radialGradient><filter id="ggl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M68 78 Q110 52 152 78 L148 92 Q110 68 72 92 Z" fill="#f5c842"/>
+<ellipse cx="110" cy="64" rx="8" ry="11" fill="#ff4400" filter="url(#ggl)"/>
+<circle cx="87" cy="74" r="4.5" fill="#ff2200"/><circle cx="133" cy="74" r="4.5" fill="#ff2200"/>
+<ellipse cx="40" cy="136" rx="34" ry="48" fill="#ddaa66" opacity="0.88"/>
+<ellipse cx="40" cy="136" rx="23" ry="34" fill="#ffcc88" opacity="0.65"/>
+<ellipse cx="180" cy="136" rx="34" ry="48" fill="#ddaa66" opacity="0.88"/>
+<ellipse cx="180" cy="136" rx="23" ry="34" fill="#ffcc88" opacity="0.65"/>
+<ellipse cx="110" cy="148" rx="76" ry="82" fill="url(#gf)"/>
+<ellipse cx="110" cy="104" rx="8" ry="10" fill="#ff4400" filter="url(#ggl)" opacity="0.9"/>
+<ellipse cx="${82+ex}" cy="${122+ey}" rx="13" ry="11" fill="white"/><ellipse cx="${82+ex}" cy="${122+ey}" rx="8" ry="7.5" fill="#331100"/><ellipse cx="${80+ex}" cy="${120+ey}" rx="3.5" ry="3.5" fill="#000"/><ellipse cx="${79+ex}" cy="${119+ey}" rx="1.4" ry="1.4" fill="#fff"/>
+<ellipse cx="${138+ex}" cy="${122+ey}" rx="13" ry="11" fill="white"/><ellipse cx="${138+ex}" cy="${122+ey}" rx="8" ry="7.5" fill="#331100"/><ellipse cx="${136+ex}" cy="${120+ey}" rx="3.5" ry="3.5" fill="#000"/><ellipse cx="${135+ex}" cy="${119+ey}" rx="1.4" ry="1.4" fill="#fff"/>
+<path d="M66 110 Q82 102 98 110" stroke="#663300" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M122 110 Q138 102 154 110" stroke="#663300" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M110 158 Q82 176 72 198 Q64 220 83 225 Q96 228 99 213 Q102 200 86 204" stroke="#cc8833" stroke-width="15" fill="none" stroke-linecap="round"/>
+<path d="M110 158 Q82 176 72 198 Q64 220 83 225 Q96 228 99 213 Q102 200 86 204" stroke="#eecc77" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.55"/>
+<path d="M88 167 Q110 180 132 167" stroke="#663300" stroke-width="2.8" fill="rgba(255,200,100,0.2)" stroke-linecap="round"/>
+<ellipse cx="158" cy="204" rx="17" ry="19" fill="#ffdd88" opacity="0.82"/>
+<path d="M148 199 Q158 186 168 199" stroke="#cc9933" stroke-width="1.8" fill="none"/>
+${[...Array(7)].map((_,i)=>`<circle cx="${77+i*10}" cy="232" r="5.5" fill="#6B3A1B" opacity="0.9"/>`).join('')}
+<text x="110" y="258" font-size="24" fill="rgba(245,200,66,0.6)" text-anchor="middle" font-family="serif">ॐ</text>
+</svg>`;}
+
+function svgDurga(ex,ey){return`<svg viewBox="0 0 220 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><radialGradient id="df" cx="50%" cy="38%" r="55%"><stop offset="0%" stop-color="#ffe0cc"/><stop offset="55%" stop-color="#e8b090"/><stop offset="100%" stop-color="#aa6644"/></radialGradient><filter id="dgl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M55 78 Q110 44 165 78 L160 94 Q110 62 60 94 Z" fill="#c8860a"/>
+<path d="M55 78 Q110 44 165 78 L160 86 Q110 56 60 86 Z" fill="#f5c842"/>
+<ellipse cx="110" cy="56" rx="8" ry="12" fill="#ff2200" filter="url(#dgl)"/>
+<ellipse cx="80" cy="66" rx="6" ry="8" fill="#ff4400"/><ellipse cx="140" cy="66" rx="6" ry="8" fill="#ff4400"/>
+<circle cx="64" cy="78" r="4.5" fill="#ffaa00"/><circle cx="156" cy="78" r="4.5" fill="#ffaa00"/>
+<path d="M52 100 Q32 150 38 210 Q48 252 62 260" stroke="#1a0800" stroke-width="20" fill="none" stroke-linecap="round" opacity="0.9"/>
+<path d="M168 100 Q188 150 182 210 Q172 252 158 260" stroke="#1a0800" stroke-width="20" fill="none" stroke-linecap="round" opacity="0.9"/>
+<path d="M58 98 Q42 142 48 192" stroke="#331100" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.55"/>
+<path d="M162 98 Q178 142 172 192" stroke="#331100" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.55"/>
+<ellipse cx="110" cy="132" rx="60" ry="70" fill="url(#df)"/>
+<circle cx="110" cy="98" r="8" fill="#cc0000" filter="url(#dgl)"/><circle cx="110" cy="98" r="4.5" fill="#ff4400"/>
+<path d="M${71+ex} ${116+ey} Q${88+ex} ${103+ey} ${105+ex} ${116+ey} Q${88+ex} ${126+ey} ${71+ex} ${116+ey}" fill="white"/>
+<ellipse cx="${88+ex}" cy="${116+ey}" rx="8" ry="7" fill="#550022"/><ellipse cx="${86+ex}" cy="${114+ey}" rx="3.3" ry="3.3" fill="#000"/><ellipse cx="${85+ex}" cy="${113+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<path d="M70 116 Q58 112 52 116" stroke="#000" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M${115+ex} ${116+ey} Q${132+ex} ${103+ey} ${149+ex} ${116+ey} Q${132+ex} ${126+ey} ${115+ex} ${116+ey}" fill="white"/>
+<ellipse cx="${132+ex}" cy="${116+ey}" rx="8" ry="7" fill="#550022"/><ellipse cx="${130+ex}" cy="${114+ey}" rx="3.3" ry="3.3" fill="#000"/><ellipse cx="${129+ex}" cy="${113+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<path d="M150 116 Q162 112 168 116" stroke="#000" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M68 104 Q88 95 105 102" stroke="#220011" stroke-width="3.8" fill="none" stroke-linecap="round"/>
+<path d="M115 102 Q132 95 152 104" stroke="#220011" stroke-width="3.8" fill="none" stroke-linecap="round"/>
+<circle cx="117" cy="138" r="4.5" fill="none" stroke="#f5c842" stroke-width="1.8"/>
+<path d="M93 156 Q110 169 127 156" stroke="#880000" stroke-width="2.5" fill="#cc3322" stroke-linecap="round"/>
+<path d="M93 156 Q110 151 127 156" stroke="#880000" stroke-width="1.8" fill="none"/>
+<path d="M68 174 Q110 190 152 174" stroke="#f5c842" stroke-width="2.2" fill="none"/>
+${[...Array(8)].map((_,i)=>`<circle cx="${72+i*13}" cy="${177+Math.sin(i*0.8)*5}" r="4" fill="#f5c842" opacity="0.8"/>`).join('')}
+<text x="155" y="168" font-size="17" fill="rgba(245,200,66,0.88)" filter="url(#dgl)">⚔️</text>
+</svg>`;}
+
+function svgVishnu(ex,ey){return`<svg viewBox="0 0 220 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><radialGradient id="vf" cx="50%" cy="38%" r="55%"><stop offset="0%" stop-color="#aaccff"/><stop offset="55%" stop-color="#5577cc"/><stop offset="100%" stop-color="#1122aa"/></radialGradient><filter id="vgl"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M76 86 L87 44 L110 33 L133 44 L144 86 Z" fill="#f5c842"/>
+<path d="M82 86 L91 52 L110 42 L129 52 L138 86 Z" fill="#e8a020"/>
+<ellipse cx="110" cy="40" rx="9" ry="11" fill="#ff2200" filter="url(#vgl)"/>
+<ellipse cx="93" cy="58" rx="5.5" ry="7" fill="#ff6600"/><ellipse cx="127" cy="58" rx="5.5" ry="7" fill="#ff6600"/>
+<circle cx="110" cy="48" r="6.5" fill="#00ffaa" filter="url(#vgl)" opacity="0.82"/>
+<ellipse cx="110" cy="132" rx="62" ry="72" fill="url(#vf)"/>
+<ellipse cx="110" cy="100" rx="4.5" ry="7" fill="#ffdd00" filter="url(#vgl)"/>
+<path d="M105 89 L103 104 Q110 110 117 104 L115 89" stroke="#ffdd00" stroke-width="1.8" fill="rgba(255,221,0,0.12)"/>
+<ellipse cx="${88+ex}" cy="${118+ey}" rx="13.5" ry="10.5" fill="white"/><ellipse cx="${88+ex}" cy="${118+ey}" rx="8.5" ry="8" fill="#223388"/><ellipse cx="${86+ex}" cy="${116+ey}" rx="3.6" ry="3.6" fill="#000"/><ellipse cx="${85+ex}" cy="${115+ey}" rx="1.4" ry="1.4" fill="#fff"/>
+<ellipse cx="${132+ex}" cy="${118+ey}" rx="13.5" ry="10.5" fill="white"/><ellipse cx="${132+ex}" cy="${118+ey}" rx="8.5" ry="8" fill="#223388"/><ellipse cx="${130+ex}" cy="${116+ey}" rx="3.6" ry="3.6" fill="#000"/><ellipse cx="${129+ex}" cy="${115+ey}" rx="1.4" ry="1.4" fill="#fff"/>
+<path d="M72 106 Q88 98 103 106" stroke="#112266" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+<path d="M117 106 Q132 98 148 106" stroke="#112266" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+<path d="M103 136 Q110 142 117 136" stroke="#335" stroke-width="1.5" fill="none"/>
+<path d="M93 155 Q110 168 127 155" stroke="#223388" stroke-width="2.8" fill="rgba(100,150,255,0.12)" stroke-linecap="round"/>
+<text x="66" y="202" font-size="15" fill="rgba(245,200,66,0.88)" filter="url(#vgl)">🐚</text>
+<text x="140" y="202" font-size="15" fill="rgba(245,200,66,0.88)" filter="url(#vgl)">⭕</text>
+<path d="M66 178 Q110 195 154 178" stroke="#ffaa00" stroke-width="2.2" fill="none"/>
+${[...Array(9)].map((_,i)=>`<circle cx="${70+i*12}" cy="${182+Math.sin(i*0.9)*4}" r="4.5" fill="#00ddaa" opacity="0.75"/>`).join('')}
+</svg>`;}
+
+function svgBrahma(ex,ey){return`<svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><radialGradient id="bf" cx="50%" cy="38%" r="55%"><stop offset="0%" stop-color="#ffe0aa"/><stop offset="60%" stop-color="#ddaa66"/><stop offset="100%" stop-color="#996622"/></radialGradient><filter id="bgl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<ellipse cx="73" cy="108" rx="34" ry="40" fill="#cc9944" opacity="0.45"/>
+<ellipse cx="147" cy="108" rx="34" ry="40" fill="#cc9944" opacity="0.45"/>
+<ellipse cx="110" cy="90" rx="32" ry="38" fill="#ddaa55" opacity="0.55"/>
+<path d="M70 98 Q110 72 150 98 L146 112 Q110 88 74 112 Z" fill="#f5c842"/>
+<ellipse cx="110" cy="82" rx="9" ry="12" fill="#ff6600" filter="url(#bgl)"/>
+<circle cx="88" cy="90" r="5" fill="#ffaa00"/><circle cx="132" cy="90" r="5" fill="#ffaa00"/>
+<ellipse cx="110" cy="152" rx="62" ry="72" fill="url(#bf)"/>
+<path d="M73 182 Q88 218 100 248 Q110 264 120 248 Q132 218 147 182" fill="white" opacity="0.82"/>
+<path d="M78 185 Q95 222 108 250 Q110 260 112 250 Q125 222 142 185" fill="#eeeedd" opacity="0.55"/>
+<ellipse cx="${85+ex}" cy="${135+ey}" rx="12.5" ry="9.5" fill="white"/><ellipse cx="${85+ex}" cy="${135+ey}" rx="7.5" ry="7" fill="#664400"/><ellipse cx="${83+ex}" cy="${133+ey}" rx="3.2" ry="3.2" fill="#000"/><ellipse cx="${82+ex}" cy="${132+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<ellipse cx="${135+ex}" cy="${135+ey}" rx="12.5" ry="9.5" fill="white"/><ellipse cx="${135+ex}" cy="${135+ey}" rx="7.5" ry="7" fill="#664400"/><ellipse cx="${133+ex}" cy="${133+ey}" rx="3.2" ry="3.2" fill="#000"/><ellipse cx="${132+ex}" cy="${132+ey}" rx="1.3" ry="1.3" fill="#fff"/>
+<path d="M70 123 Q85 116 100 123" stroke="#553300" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M120 123 Q135 116 150 123" stroke="#553300" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M102 155 Q110 162 118 155" stroke="#554" stroke-width="1.5" fill="none"/>
+<path d="M92 172 Q110 186 128 172" stroke="#553300" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+<text x="60" y="228" font-size="17" fill="rgba(245,200,66,0.85)" filter="url(#bgl)">📖</text>
+<text x="140" y="228" font-size="17" fill="rgba(245,200,66,0.85)">🪷</text>
+<text x="110" y="116" font-size="15" fill="rgba(245,200,66,0.92)" text-anchor="middle" filter="url(#bgl)" font-family="serif">ॐ</text>
+${[...Array(8)].map((_,i)=>`<circle cx="${70+i*13}" cy="${200+Math.sin(i)*3}" r="5" fill="#6B3A1B" opacity="0.9"/>`).join('')}
+</svg>`;}
+
+const SVGMAP={shiva:svgShiva,krishna:svgKrishna,ganesh:svgGanesh,durga:svgDurga,vishnu:svgVishnu,brahma:svgBrahma};
+
+// ══ GOD DATA ══
+const GODS={
+  shiva:{name:'भगवान शिव',aura:'radial-gradient(circle,rgba(80,120,255,0.55) 0%,transparent 70%)',vid:'onwK4e9ZLuTAKqWW03F9'},
+  krishna:{name:'भगवान कृष्ण',aura:'radial-gradient(circle,rgba(50,100,255,0.55) 0%,transparent 70%)',vid:'TxGEqnHWrfWFTfGW9XjX'},
+  ganesh:{name:'भगवान गणेश',aura:'radial-gradient(circle,rgba(255,140,40,0.55) 0%,transparent 70%)',vid:'ErXwobaYiN019PkySvjV'},
+  durga:{name:'माँ दुर्गा',aura:'radial-gradient(circle,rgba(255,40,60,0.55) 0%,transparent 70%)',vid:'EXAVITQu4vr4xnSDxMaL'},
+  vishnu:{name:'भगवान विष्णु',aura:'radial-gradient(circle,rgba(40,80,255,0.55) 0%,transparent 70%)',vid:'VR6AewLTigWG4xSOukaG'},
+  brahma:{name:'भगवान ब्रह्मा',aura:'radial-gradient(circle,rgba(255,170,30,0.55) 0%,transparent 70%)',vid:'pNInz6obpgDQGcFmaJgB'}
+};
+
+// ══ WISDOM ══
+const W={
+  shiva:['🔱 हे वत्स! तुम्हारा प्रश्न ब्रह्माण्ड की गहराइयों तक पहुँचा। जो नष्ट होता है वह पुनः जन्म लेता है — यही मेरा तांडव है। कैलाश से तुम्हें आशीर्वाद। ॐ नमः शिवाय!','🔱 पुत्र, गंगा जैसे पत्थरों को तराशती है, वैसे ही कठिनाइयाँ तुम्हें निखार रही हैं। हर अंत नई शुरुआत है। हर हर महादेव!','🔱 ध्यान करो पुत्र। जब मन शांत होता है तो सभी प्रश्नों के उत्तर भीतर से आते हैं — जैसे मैं कैलाश पर ध्यानमग्न रहता हूँ। ॐ की शक्ति महसूस करो!','🔱 हे प्रिय! शिव का मार्ग वैराग्य और प्रेम दोनों का है। विष पीकर भी मैं नीलकंठ बना — तुम्हारे दुःख भी तुम्हें महान बनाएँगे। भोलेनाथ का आशीर्वाद!'],
+  krishna:['🦚 प्रिय सखा! गीता में मैंने कहा — कर्म करो, फल की चिंता मत करो। यह पल, यह जीवन — मेरी लीला है। राधे राधे! हरे कृष्ण!','🦚 वत्स, अर्जुन भी संशय में था। मैंने उसे कहा — उठो, निडर होकर लड़ो। तुम्हारा उत्तर तुम्हारे आत्मा में है। जय श्री कृष्ण!','🦚 सखा, मैं गोकुल का गोपाल भी हूँ और द्वारका का राजा भी। हर पल में आनंद है। बस देखने की दृष्टि बदलो। हरे कृष्ण हरे राम!','🦚 प्रिय, मेरी बाँसुरी की धुन तुम्हारे हृदय में भी गूंजती है। अपने आत्मा की आवाज़ सुनो। योगेश्वर का आशीर्वाद!'],
+  ganesh:['🐘 जय गणेश! हर विघ्न हटाऊँगा मैं। एक कदम उठाओ, बाकी रास्ता मैं दिखाऊँगा। गणपति बप्पा मोरया!','🐘 वत्स, मेरी सूंड़ हर बाधा हटाती है। जीवन में कठिनाई आए — घबराओ मत, हर समस्या के पीछे अवसर है। शुभ लाभ!','🐘 नई शुरुआत से पहले मुझे याद करो। मेहनत + बुद्धि + विश्वास = सफलता। मैं सदा तुम्हारे साथ! गणपति बप्पा मोरया!','🐘 प्रिय! महादेव और माँ पार्वती का आशीर्वाद तुम पर है। धैर्य रखो — रात के बाद सुबह अवश्य आएगी! जय गणेश!'],
+  durga:['⚔️ जय माता दी! मैं नवदुर्गा हूँ — शेर पर सवार। तुम्हारे जीवन का अंधकार मेरी शक्ति से दूर होगा। डरो मत!','⚔️ वत्स! महिषासुर जैसे राक्षस भी मेरे सामने झुके। अपनी शक्ति पहचानो — माँ दुर्गा का अंश तुममें है। जय माता दी!','⚔️ बेटा-बेटी, माँ के पास आ जाओ। मैं सिंह पर सवार होकर तुम्हारी बाधाएँ काट दूँगी। रोना ठीक है — हार मत मानो!','⚔️ प्रिय! मैंने ही महाकाली बनकर असुरों का नाश किया। वही शक्ति तुममें है — उसे जगाओ! जय माता दी!'],
+  vishnu:['🌊 हे वत्स! मैं जगत का पालनहार हूँ। संसार में संतुलन ही सबसे बड़ा धर्म है। धर्म के मार्ग पर चलो। ॐ नमो नारायणाय!','🌊 प्रिय भक्त! मैंने दस अवतार लिए — हर युग में धर्म की रक्षा के लिए। तुम्हारे जीवन में भी नया अवतार आएगा!','🌊 हे पुत्र! सेवा, ईमानदारी और धर्म से जो कमाओ वह टिकाऊ होता है। शेषनाग पर विराजमान मैं सदा तुम्हारी रक्षा करता हूँ!','🌊 Dear devotee! I am Vishnu, the preserver. Trust the divine plan. Your dharma is unique. Om Namo Narayanaya!'],
+  brahma:['✨ हे सृष्टि के अंश! मैं ब्रह्मा हूँ — इस विश्व का रचयिता। जिज्ञासा को कभी मत छोड़ो। सत्यम शिवम सुंदरम!','✨ वत्स! मैंने हर आत्मा का एक उद्देश्य निश्चित किया। तुम्हारा जन्म व्यर्थ नहीं — अपना उद्देश्य खोजो!','✨ प्रिय! वेदों में लिखा है — ज्ञान ही सबसे बड़ा धन है। भीतर झाँको, ब्रह्म को पहचानो। चारों वेदों का आशीर्वाद!','✨ Dear seeker! I am Brahma — your curiosity is divine. Know thyself and you shall know the universe. Satyam Shivam Sundaram!']
+};
+const KW={
+  'pyar|love|mohabbat|rishta|dil|prem':{shiva:'🔱 प्रेम और वैराग्य — दोनों शिव के स्वरूप। सच्चा प्रेम वह जो मुक्त करे। जैसे गंगा बहती है, प्रेम भी बहने दो। ॐ नमः शिवाय! 💙',krishna:'🦚 प्रेम तो मेरा स्वभाव है — राधा-कृष्ण का प्रेम अमर है। जब प्रेम में अहंकार न हो, वह ईश्वरीय बन जाता है! राधे राधे! 💛',ganesh:'🐘 प्रेम में भी विवेक रखो। शिव-पार्वती का प्रेम आदर्श है। पहले खुद से प्रेम करना सीखो! गणपति बप्पा! 🧡',durga:'⚔️ प्रेम शक्ति है, कमजोरी नहीं! माँ का प्रेम निस्वार्थ होता है। रिश्तों में शक्ति और प्रेम दोनों रखो। जय माता दी! ❤️',vishnu:'🌊 सच्चा प्रेम धर्म के साथ चले — वफादारी, सम्मान और समर्पण। ऐसा प्रेम वैकुण्ठ तक पहुँचाता है! 💙',brahma:'✨ मैंने सृष्टि में प्रेम को आधार बनाया। प्रेम में सत्य रखो, वह अमर हो जाएगा! 💜'},
+  'paise|money|dhan|naukri|job|career|kaam|business':{shiva:'🔱 धन माया है पर ज़रूरी भी। कर्म करो निष्काम भाव से — धन स्वतः आएगा। धन को साधन बनाओ, लक्ष्य नहीं। महादेव का आशीर्वाद! 💰',krishna:'🦚 उत्कृष्टता के पीछे भागो, धन आएगा। मेहनत और ईमानदारी सदा फल देती है। हरे कृष्ण! 💰',ganesh:'🐘 नया काम शुरू करने से पहले मुझे याद करो! मेहनत + बुद्धि = सफलता। मैं विघ्न हटाऊँगा! गणपति बप्पा! 💰',durga:'⚔️ न्यायपूर्ण तरीके से कमाओ — माँ दुर्गा ऐसों की रक्षा करती है। लालच से बचो! जय माता दी! 💰',vishnu:'🌊 धर्म के मार्ग पर कमाया धन टिकाऊ होता है। सेवा से समृद्धि आती है। ॐ नमो नारायणाय! 💰',brahma:'✨ हर इंसान में एक विशेष प्रतिभा है — उसे पहचानो। ज्ञान से बड़ा कोई धन नहीं! 💰'},
+  'dukh|dard|pareshan|tension|sad|udas|takleef|rona':{shiva:'🔱 दुःख को मैं जानता हूँ — मैंने स्वयं विष पिया था। दर्द तुम्हें निखारने आया है। मैं तुम्हारे साथ हूँ। ॐ नमः शिवाय! 💙',krishna:'🦚 यह दुःख स्थाई नहीं — सुख-दुःख दोनों आते-जाते हैं। तुम भी उठोगे जैसे अर्जुन उठा। राधे कृष्ण! 💛',ganesh:'🐘 दुःख में मुझे याद करो! हर समस्या का हल होता है। रात के बाद सुबह आती है! 💚',durga:'⚔️ बेटा-बेटी, माँ के पास आओ। मैं तुम्हारी बाधाएँ काट दूँगी। रोना ठीक है — हार मत मानो! ❤️',vishnu:'🌊 ध्यान करो, प्रकृति से जुड़ो। मैं सदा तुम्हारा पालन करता हूँ — तुम अकेले नहीं! 💙',brahma:'✨ दुःख-सुख दोनों जीवन के रंग हैं। यह दौर भी गुजरेगा। तुम्हारी कहानी अभी खत्म नहीं हुई! 💜'},
+  'future|bhavishya|aage|kal|kismat|hoga|destiny':{shiva:'🔱 तुम्हारा भविष्य तुम्हारे वर्तमान के कर्म बना रहे हैं। आज अच्छा करो, कल अपने आप अच्छा होगा! ॐ! 🔮',krishna:'🦚 वर्तमान में जियो और कर्म करो — यही सच्चा ज्ञान है। हरे कृष्ण! 🔮',ganesh:'🐘 भविष्य उज्जवल है! मैं विघ्न हटाऊँगा। मेहनत करते रहो। शुभ लाभ! 🔮',durga:'⚔️ निडर होकर काम करने वालों का भविष्य उज्जवल होता है। माँ दुर्गा साथ है! 🔮',vishnu:'🌊 धर्म पर रहो — भविष्य सुंदर होगा। ॐ नमो नारायणाय! 🔮',brahma:'✨ तुम्हारा भाग्य और कर्म मिलकर भविष्य बनाते हैं! ✨'}
+};
+function getAns(q,g){
+  const ql=q.toLowerCase();
+  for(const [kw,rs] of Object.entries(KW)){if(new RegExp(kw,'i').test(ql)&&rs[g])return rs[g];}
+  const pool=W[g];return pool[Math.floor(Math.random()*pool.length)];
+}
+
+// ══ STATE ══
+let CUR='shiva',BUSY=false,LIS=false,REC=null,EKEY='';
+let EX=0,EY=0;
+
+function loadS(){EKEY=localStorage.getItem('elvKey')||'';if(EKEY)document.getElementById('ekey').value=EKEY;}
+function saveS(){EKEY=document.getElementById('ekey').value.trim();if(!EKEY){toast('ElevenLabs key daalo!');return;}localStorage.setItem('elvKey',EKEY);closeS();toast('✨ Madhur awaaz activate ho gayi!');}
+function openS(){document.getElementById('smod').classList.add('open');}
+function closeS(){document.getElementById('smod').classList.remove('open');}
+document.getElementById('smod').addEventListener('click',e=>{if(e.target===document.getElementById('smod'))closeS();});
+
+// ══ RENDER GOD ══
+function render(g,ex,ey){document.getElementById('gwrap').innerHTML=SVGMAP[g](ex,ey);}
+
+function chgod(g){
+  CUR=g;const god=GODS[g];
+  document.getElementById('gname').textContent=god.name;
+  document.getElementById('gaura').style.background=god.aura;
+  document.querySelectorAll('.gb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('g-'+g).classList.add('on');
+  render(g,EX,EY);showGod(false);
+  if(!BUSY)setTimeout(hideGod,2500);
+}
+function showGod(wb){
+  document.getElementById('gscene').classList.add('vis');
+  if(!wb){document.getElementById('awrap').classList.remove('show');document.getElementById('atxt').textContent='';}
+}
+function hideGod(){if(BUSY)return;document.getElementById('gscene').classList.remove('vis');document.getElementById('awrap').classList.remove('show');}
+
+// ══ EYE TRACK ══
+function trackEye(cx2,cy2){
+  const rect=document.getElementById('gwrap').getBoundingClientRect();
+  const mx=rect.left+rect.width/2,my=rect.top+rect.height/2;
+  const dx=(cx2-mx)/innerWidth,dy=(cy2-my)/innerHeight;
+  EX=Math.max(-8,Math.min(8,dx*22));EY=Math.max(-6,Math.min(6,dy*20));
+  render(CUR,EX,EY);
+}
+document.addEventListener('mousemove',e=>{if(document.getElementById('gscene').classList.contains('vis'))trackEye(e.clientX,e.clientY);});
+document.addEventListener('touchmove',e=>{if(document.getElementById('gscene').classList.contains('vis')){const t=e.touches[0];trackEye(t.clientX,t.clientY);}},{passive:true});
+
+// ══ MIC ══
+function togMic(){
+  if(BUSY)return;
+  if(LIS){REC?.stop();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('Browser mic support nahi karta 😢');return;}
+  REC=new SR();REC.lang='hi-IN';REC.continuous=false;REC.interimResults=true;
+  REC.onstart=()=>{LIS=true;document.getElementById('micb').classList.add('on');document.getElementById('gwrap').classList.add('listening');showGod(false);setst('🎤 बोलिए... देव सुन रहे हैं');};
+  REC.onresult=e=>{document.getElementById('qinp').value=Array.from(e.results).map(r=>r[0].transcript).join('');};
+  REC.onerror=()=>{endLis();toast('Dobara try karein 🙏');};
+  REC.onend=()=>{endLis();const v=document.getElementById('qinp').value.trim();if(v)ask();else{setst('Kuch suna nahi... 🙏');hideGod();}};
+  REC.start();
+}
+function endLis(){LIS=false;document.getElementById('micb').classList.remove('on');document.getElementById('gwrap').classList.remove('listening');}
+
+// ══ ASK ══
+async function ask(){
+  if(BUSY)return;
+  const inp=document.getElementById('qinp');const q=inp.value.trim();
+  if(!q){toast('Pehle prashn likho ya bolo 🙏');return;}
+  inp.value='';BUSY=true;document.getElementById('sndb').disabled=true;
+  showGod(true);particles();setst('देव ध्यान कर रहे हैं... ✨');showLdr(true);
+  await sleep(1100);
+  const ans=getAns(q,CUR);
+  showLdr(false);await typeIt(ans);waves();
+  setst('देव वाणी बोल रहे हैं ✨');document.getElementById('gwrap').classList.add('speaking');
+  await speakIt(ans,GODS[CUR].vid);
+  document.getElementById('gwrap').classList.remove('speaking');
+  BUSY=false;document.getElementById('sndb').disabled=false;
+  setst('प्रश्न पूछें — ब्रह्मांड सुन रहा है 🙏');
+  setTimeout(hideGod,6000);
+}
+
+// ══ TYPE ══
+function typeIt(txt){return new Promise(res=>{const el=document.getElementById('atxt'),wr=document.getElementById('awrap');el.textContent='';el.className='typing';wr.classList.add('show');let i=0;const iv=setInterval(()=>{if(i<txt.length){el.textContent+=txt[i];i++;}else{clearInterval(iv);el.className='';res();}},26);});}
+
+// ══ SPEAK ══
+async function speakIt(txt,vid){return new Promise(async res=>{
+  if(!EKEY){await spkBrowser(txt);res();return;}
+  try{const r=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vid}`,{method:'POST',headers:{'xi-api-key':EKEY,'Content-Type':'application/json'},body:JSON.stringify({text:txt,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.42,similarity_boost:0.82,style:0.38,use_speaker_boost:true}})});
+  if(!r.ok)throw 0;const blob=await r.blob(),url=URL.createObjectURL(blob);const a=new Audio(url);a.onended=()=>{URL.revokeObjectURL(url);res();};a.onerror=()=>res();a.play();}catch(e){await spkBrowser(txt);res();}
+});}
+function spkBrowser(txt){return new Promise(res=>{if(!('speechSynthesis' in window)){setTimeout(res,2000);return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);const vs=speechSynthesis.getVoices();const v=vs.find(x=>x.lang.startsWith('hi'))||vs.find(x=>x.lang.startsWith('en-IN'))||vs[0];if(v)u.voice=v;u.rate=0.8;u.pitch=0.72;u.lang='hi-IN';u.onend=u.onerror=()=>res();speechSynthesis.speak(u);});}
+
+// ══ HELPERS ══
+function showLdr(on){document.getElementById('ldr').classList.toggle('show',on);}
+function setst(m){document.getElementById('status').textContent=m;}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function waves(){document.querySelectorAll('.sw').forEach(w=>{w.classList.remove('go');void w.offsetWidth;w.classList.add('go');});}
+function particles(){for(let i=0;i<28;i++){const p=document.createElement('div');p.className='pt';const sz=Math.random()*10+3,h=25+Math.random()*45;p.style.cssText=`width:${sz}px;height:${sz}px;background:hsl(${h},100%,65%);box-shadow:0 0 8px hsl(${h},100%,55%);left:50%;top:55%;--tx:${(Math.random()-0.5)*380}px;--ty:${(Math.random()-0.85)*320}px;`;document.body.appendChild(p);setTimeout(()=>p.remove(),1800);}}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+
+// ══ ENTER ══
+function enter(){
+  const in2=document.getElementById('intro');in2.style.opacity='0';setTimeout(()=>in2.remove(),1600);
+  startMusic();speechSynthesis?.getVoices();loadS();
+  render('shiva',0,0);document.getElementById('gaura').style.background=GODS.shiva.aura;
+}
+window.addEventListener('load',()=>{speechSynthesis?.getVoices();});
+</script>
+</body>
+</html>
