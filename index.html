@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>ब्रह्माण्ड वाणी — Ultimate Divine Oracle</title>
+    <style>
+        /* CSS FIX: Ensuring Visibility */
+        body { margin: 0; background: #000; color: white; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        #canvas-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle, #1a0830, #000); }
+        
+        /* GOD SCENE CONTAINER */
+        #gscene {
+            position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+            width: 400px; height: 600px; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end; z-index: 10;
+        }
+
+        /* HOLOGRAM EFFECT */
+        #giwrap {
+            position: relative; width: 300px; height: 450px;
+            filter: drop-shadow(0 0 20px var(--gc, #42a5f5));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        #god-img {
+            width: 100%; height: 100%; object-fit: contain;
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* GLOWING PLATFORM */
+        #hplatform {
+            width: 200px; height: 20px; background: var(--gc, #42a5f5);
+            border-radius: 50%; filter: blur(15px); opacity: 0.7; margin-top: -30px;
+        }
+
+        /* UI ELEMENTS */
+        #ibar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 100; }
+        input { padding: 15px; width: 300px; border-radius: 25px; border: 1px solid #f5c842; background: rgba(0,0,0,0.8); color: white; }
+        button { padding: 10px 20px; border-radius: 25px; background: #f5c842; cursor: pointer; border: none; font-weight: bold; }
+
+        /* SPEECH BUBBLE */
+        #awrap {
+            position: fixed; top: 150px; left: 50%; transform: translateX(-50%);
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3);
+            width: 80%; max-width: 500px; display: none; text-align: center; font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="canvas-bg"></div>
+
+<div id="gscene">
+    <div id="awrap"><span id="atxt"></span></div>
+    <div id="giwrap">
+        <img id="god-img" src="https://i.imgur.com/3W7mG5L.png" alt="God View">
+    </div>
+    <div id="hplatform"></div>
+    <h2 id="gname" style="color:#f5c842; text-shadow: 0 0 10px gold;">महादेव</h2>
+</div>
+
+<div id="ibar">
+    <button onclick="changeGod('shiva')">🔱 Shiv</button>
+    <input type="text" id="qinp" placeholder="अपना प्रश्न पूछें...">
+    <button onclick="ask()">पूछें ✨</button>
+    <button onclick="changeGod('krishna')">🦚 Krishna</button>
+</div>
+
+<script>
+    const GOD_ASSETS = {
+        shiva: { name: "महादेव", img: "https://i.imgur.com/3W7mG5L.png", color: "#42a5f5" },
+        krishna: { name: "श्री कृष्ण", img: "https://i.imgur.com/V9rGv8K.png", color: "#fbc02d" }
+    };
+
+    function changeGod(type) {
+        const g = GOD_ASSETS[type];
+        document.getElementById('god-img').src = g.img;
+        document.getElementById('gname').innerText = g.name;
+        document.documentElement.style.setProperty('--gc', g.color);
+    }
+
+    function ask() {
+        const query = document.getElementById('qinp').value;
+        if(!query) return;
+
+        const response = "वत्स, विचलित न हो। समय ही हर समस्या का समाधान है।";
+        const wrap = document.getElementById('awrap');
+        const txt = document.getElementById('atxt');
+
+        wrap.style.display = 'block';
+        txt.innerText = "";
+        let i = 0;
+        const timer = setInterval(() => {
+            txt.innerText += response[i];
+            i++;
+            if(i >= response.length) {
+                clearInterval(timer);
+                speak(response);
+            }
+        }, 50);
+    }
+
+    function speak(text) {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'hi-IN';
+        u.pitch = 0.8;
+        window.speechSynthesis.speak(u);
+    }
+</script>
+
+</body>
+</html>
