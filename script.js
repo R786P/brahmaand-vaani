@@ -25,7 +25,7 @@ const GODS = {
   durga: {
     name: 'Maa Durga',
     // TV Serial Style - Warrior Goddess with Lion
-    image: 'https://images.unsplash.com/photo-1607604276111-547928b9ec6?w=400&h=550&fit=crop',
+    image: 'https://drive.google.com/file/d/1E_O2UmWeYcGZZ47wvG5qwbXZImy9wapt/view?usp=drivesdk',
     prompt: 'You are Maa Durga - fierce and protective mother goddess. Answer with strength. Use "Jay Mata Di".',
     color: '#e74c3c'
   },
