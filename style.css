@@ -186,3 +186,59 @@ body {
   color: #fff;
   border: 1px solid #555;
 }
+/* 🌟 Advanced Hologram Effects */
+
+/* 1. RGB Split Effect (3D hologram jaisa) */
+#god-image {
+  animation: hologram-float 4s ease-in-out infinite,
+             hologram-flicker 0.1s infinite;
+}
+
+@keyframes hologram-flicker {
+  0% { opacity: 0.97; }
+  50% { opacity: 1; }
+  100% { opacity: 0.98; }
+}
+
+/* 2. Color Shift Effect */
+#hologram-god::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(100, 200, 255, 0.1) 0%,
+    rgba(255, 215, 0, 0.1) 50%,
+    rgba(100, 200, 255, 0.1) 100%
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 3. Border Glow Effect */
+#hologram-god {
+  border: 2px solid rgba(100, 200, 255, 0.5);
+  box-shadow: 
+    0 0 20px rgba(100, 200, 255, 0.6),
+    0 0 40px rgba(255, 215, 0, 0.4),
+    inset 0 0 20px rgba(100, 200, 255, 0.3);
+}
+
+/* 4. Krishna Special - Peacock Hologram */
+#hologram-god.krishna-active {
+  border-color: rgba(251, 191, 36, 0.7);
+  box-shadow: 
+    0 0 30px rgba(251, 191, 36, 0.8),
+    0 0 60px rgba(30, 58, 138, 0.6),
+    inset 0 0 30px rgba(251, 191, 36, 0.4);
+}
+
+/* 5. Shiva Special - Trishul Glow */
+#hologram-god.shiva-active {
+  border-color: rgba(78, 205, 196, 0.7);
+  box-shadow: 
+    0 0 30px rgba(78, 205, 196, 0.8),
+    0 0 60px rgba(44, 62, 80, 0.6),
+    inset 0 0 30px rgba(78, 205, 196, 0.4);
+  }
