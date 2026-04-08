@@ -4,3 +4,4 @@ groq
 python-dotenv
 gunicorn
 requests
+huggingface_hub
