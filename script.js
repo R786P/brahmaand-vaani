@@ -226,7 +226,7 @@ async function speakWithElevenLabs(text) {
         currentAudio = null;
       }
       
-      const audio = new Audio(data.audio);
+      const audio = new Audio(`data:${data.audio}`);
       currentAudio = audio;
       audio.volume = 0.9;
       
