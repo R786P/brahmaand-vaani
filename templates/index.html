@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🕉️ Divine AI - Final Fix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Mobile Debug Console -->
+  <script src="https://cdn.jsdelivr.net/npm/vconsole@latest/dist/vconsole.min.js"></script>
+  
+  <style>
+    /* === SAARA CSS YAHAN HAI === */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Rajdhani', sans-serif; background: #0a0a1a; color: #fff; min-height: 100vh; }
+    
+    header { text-align: center; padding: 20px; background: linear-gradient(135deg, #ffd700, #ff6b6b); color: #1a1a3a; }
+    header h1 { font-size: 2rem; }
+    
+    /* DEBUG BOX */
+    #debug-box {
+      background: rgba(0, 255, 0, 0.1);
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+    
+    /* GOD STAGE - FORCED VISIBLE */
+    #god-stage { 
+      display: flex; justify-content: center; align-items: center; 
+      min-height: 350px; padding: 20px; 
+      background: rgba(255,215,0,0.05);
+      border: 2px solid #ffd700;
+      margin: 10px; border-radius: 20px;
+    }
+    
+    #hologram-god { 
+      position: relative; width: 250px; height: 320px; 
+      /* display: block forced */
+      display: block !important; 
+      background: rgba(0,0,0,0.5);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 0 30px rgba(255,215,0,0.5);
+    }
+    
+    #god-image { 
+      width: 100%; height: 100%; object-fit: cover; 
+      background: #1a1a3a;
+    }
+    
+    /* GOD CHIPS */
+    .god-chips { display: flex; gap: 10px; padding: 15px; overflow-x: auto; }
+    .god-chip { padding: 10px 20px; background: rgba(100,200,255,0.2); border: 1px solid rgba(100,200,255,0.5); border-radius: 25px; cursor: pointer; white-space: nowrap; }
+    .god-chip.active { background: rgba(255,215,0,0.3); border-color: #ffd700; }
+    
+    /* CONTROLS */
+    #control-panel { padding: 20px; margin: 10px; background: rgba(20,20,40,0.9); border: 1px solid rgba(100,200,255,0.3); border-radius: 20px; }
+    #user-query { width: 100%; min-height: 80px; padding: 15px; border-radius: 15px; border: 2px solid rgba(100,200,255,0.3); background: rgba(15,15,35,0.9); color: white; font-size: 1rem; margin-bottom: 15px; font-family: inherit; }
+    .btn { padding: 15px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; font-size: 1.1rem; }
+    #send-btn { background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white; }
+    #voice-btn { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; }
+    
+    #response-area { margin-top: 20px; padding: 15px; background: rgba(30,30,60,0.8); border-left: 5px solid #ffd700; border-radius: 12px; display: none; }
+    #response-area.show { display: block; }
+    
+    #reaction-bubble { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ffd700, #ff6b6b); color: #1a1a3a; padding: 10px 20px; border-radius: 25px; font-weight: 700; display: none; z-index: 1000; }
+    #reaction-bubble.show { display: block; }
+    
+    footer { text-align: center; padding: 20px; color: #666; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🕉️ Divine AI</h1>
+    <p>Final Fix Version</p>
+  </header>
+  
+  <!-- DEBUG BOX (Screen pe error dikhayega) -->
+  <div id="debug-box">🔄 Loading...</div>
+  
+  <!-- GOD STAGE -->
+  <div id="god-stage">
+    <div id="hologram-god">
+      <!-- Image with Fallback -->
+      <img id="god-image" src="" alt="God" />
+    </div>
+  </div>
+  
+  <!-- GOD CHIPS -->
+  <div class="god-chips">
+    <div class="god-chip active" onclick="selectGod('cosmic')">🌌 Cosmic</div>
+    <div class="god-chip" onclick="selectGod('shiva')">🕉️ Shiva</div>
+    <div class="god-chip" onclick="selectGod('krishna')">🦚 Krishna</div>
+    <div class="god-chip" onclick="selectGod('vishnu')">🪷 Vishnu</div>
+    <div class="god-chip" onclick="selectGod('durga')">🦁 Durga</div>
+  </div>
+  
+  <!-- CONTROLS -->
+  <div id="control-panel">
+    <textarea id="user-query" placeholder="🙏 Apna prashn likhiye..."></textarea>
+    <button id="voice-btn" class="btn"><i class="fas fa-microphone"></i> Sunna</button>
+    <button id="send-btn" class="btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Bhejiye</button>
+    
+    <div id="response-area">
+      <div id="god-response"></div>
+    </div>
+  </div>
+  
+  <div id="reaction-bubble">🙏</div>
+  <footer>Divine AI © 2024 | Radhe Radhe 🦚</footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Mobile Console
+    var vConsole = new VConsole();
+    
+    const debugBox = document.getElementById('debug-box');
+    const godImage = document.getElementById('god-image');
+    const hologramGod = document.getElementById('hologram-god');
+    const reactionBubble = document.getElementById('reaction-bubble');
+    
+    function log(msg) {
+      debugBox.innerHTML = `🔍 ${msg}`;
+      console.log(msg);
+    }
+    
+    function showReaction(text) {
+      reactionBubble.textContent = text;
+      reactionBubble.classList.add('show');
+      setTimeout(() => reactionBubble.classList.remove('show'), 3000);
+    }
+    
+    // God Config - LOCAL ASSETS PATH
+    const GODS = {
+      cosmic: { name: 'Cosmic Guide', image: '/assets/gods/cosmic.png' },
+      shiva: { name: 'Lord Shiva', image: '/assets/gods/shiva.png' },
+      krishna: { name: 'Shri Krishna', image: '/assets/gods/krishna.png' },
+      vishnu: { name: 'Lord Vishnu', image: '/assets/gods/vishnu.png' },
+      durga: { name: 'Maa Durga', image: '/assets/gods/durga.png' }
+    };
+    
+    let currentGod = 'cosmic';
+    
+    function selectGod(godKey) {
+      currentGod = godKey;
+      const god = GODS[godKey];
+      
+      // Update Chips
+      document.querySelectorAll('.god-chip').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Update Image
+      if (godImage) {
+        log(`✅ Loading: ${god.image}`);
+        godImage.src = god.image;
+      }
+      
+      showReaction(`🙏 ${god.name}`);
+    }
+    
+    // Image Load Check
+    godImage.onload = () => {
+      log('✅ Image Loaded Successfully!');
+      showReaction('✅ Hologram Ready');
+    };
+    
+    godImage.onerror = () => {
+      log('❌ Image Not Found! Check assets folder.');
+      // Fallback to online image if local fails
+      godImage.src = 'https://via.placeholder.com/250x320/FFD700/000000?text=Image+Not+Found';
+      showReaction('⚠️ Image Error');
+    };
+    
+    async function sendMessage() {
+      const query = document.getElementById('user-query').value.trim();
+      if (!query) return;
+      
+      showReaction('✨ Sending...');
+      const responseArea = document.getElementById('response-area');
+      const godResponse = document.getElementById('god-response');
+      
+      responseArea.classList.add('show');
+      godResponse.innerHTML = '<em>⏳ Processing...</em>';
+      
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: query,
+            system_prompt: `You are ${GODS[currentGod].name}. Answer in Hindi.`
+          })
+        });
+        
+        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+        
+        const data = await response.json();
+        godResponse.textContent = data.reply;
+        showReaction('✅ Reply Received');
+        log('✅ API Success');
+        
+      } catch (error) {
+        godResponse.textContent = `⚠️ Error: ${error.message}`;
+        showReaction('❌ API Error');
+        log(`❌ ${error.message}`);
+      }
+    }
+    
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      log('✅ Page Loaded. Initializing...');
+      selectGod('cosmic');
+      
+      // Force show hologram
+      if (hologramGod) {
+        hologramGod.style.display = 'block';
+        log('✅ Hologram Forced Visible');
+      }
+    });
+  </script>
+</body>
+</html>
