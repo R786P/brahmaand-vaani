@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>🕉️ Divine AI - Talking Gods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vconsole@latest/dist/vconsole.min.js"></script>
+  
+  <style>
+    :root { --primary: #ffd700; --secondary: #ff6b6b; --accent: #4ecdc4; --dark: #0a0a1a; --glass: rgba(20, 20, 40, 0.85); --glass-border: rgba(100, 200, 255, 0.3); --text: #ffffff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Rajdhani', sans-serif; background: var(--dark); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+    
+    header { text-align: center; padding: 15px; background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(100,200,255,0.1)); border-bottom: 1px solid var(--glass-border); }
+    header h1 { color: var(--primary); font-size: 1.6rem; text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+    header p { color: #aaa; font-size: 0.9rem; margin-top: 5px; }
+    
+    .god-chips { display: flex; gap: 8px; padding: 10px; overflow-x: auto; scrollbar-width: none; }
+    .god-chips::-webkit-scrollbar { display: none; }
+    .god-chip { padding: 8px 16px; background: rgba(100,200,255,0.2); border: 1px solid var(--glass-border); border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.25s ease; color: white; }
+    .god-chip:hover, .god-chip.active { background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(100,200,255,0.25)); border-color: var(--primary); transform: translateY(-2px); }
+    .god-chip.active { box-shadow: 0 0 15px rgba(255,215,0,0.35); font-weight: 600; }
+    
+    #god-stage { display: flex; justify-content: center; align-items: center; min-height: 300px; padding: 20px; position: relative; }
+    #hologram-god { position: relative; width: 200px; height: 280px; display: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 30px rgba(255,215,0,0.5); filter: drop-shadow(0 0 25px rgba(100, 200, 255, 0.8)) drop-shadow(0 0 50px rgba(255, 215, 0, 0.5)); animation: hologram-float 4s ease-in-out infinite; }
+    #hologram-god.visible { display: block; animation: hologram-appear 0.5s ease forwards, hologram-float 4s ease-in-out infinite; }
+    @keyframes hologram-float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-12px) scale(1.03); } }
+    @keyframes hologram-appear { from { opacity: 0; transform: scale(0.85) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    
+    #god-image { width: 100%; height: 100%; object-fit: contain; background: rgba(0,0,0,0.3); border-radius: 16px; position: relative; background: repeating-linear-gradient(0deg, rgba(100, 200, 255, 0.08) 0px, rgba(100, 200, 255, 0.08) 2px, transparent 4px, transparent 6px); }
+    #god-image::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%); animation: scanline 3s linear infinite; pointer-events: none; border-radius: 16px; }
+    @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+    
+    #god-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 16px; object-fit: contain; background: rgba(0,0,0,0.3); z-index: 2; display: none; }
+    #god-video.playing { display: block !important; animation: video-glow 2s ease-in-out infinite; }
+    @keyframes video-glow { 0%, 100% { box-shadow: 0 0 25px rgba(100, 200, 255, 0.8), 0 0 50px rgba(255, 215, 0, 0.5); } 50% { box-shadow: 0 0 40px rgba(100, 200, 255, 1), 0 0 70px rgba(255, 215, 0, 0.8); } }
+    
+    #hologram-god.talking #god-image { animation: talking-pulse 0.35s ease-in-out infinite alternate, hologram-float 4s ease-in-out infinite; filter: drop-shadow(0 0 35px rgba(255, 215, 0, 0.95)) drop-shadow(0 0 70px rgba(100, 200, 255, 0.85)); transform-origin: center bottom; }
+    #hologram-god.talking { animation: speaking-bounce 0.25s ease-in-out infinite; }
+    @keyframes talking-pulse { 0%, 100% { filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 50px rgba(100, 200, 255, 0.7)); transform: scale(1); } 100% { filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 90px rgba(100, 200, 255, 0.95)); transform: scale(1.04); } }
+    @keyframes speaking-bounce { 0%, 100% { transform: translateY(0) scale(1); } 25% { transform: translateY(-7px) scale(1.02); } 50% { transform: translateY(0) scale(1); } 75% { transform: translateY(5px) scale(1.01); } }
+    
+    #hologram-god.talking #god-image::after { content: ''; position: absolute; bottom: 18%; left: 50%; transform: translateX(-50%); width: 50px; height: 16px; background: radial-gradient(ellipse at center, rgba(255, 90, 90, 0.95) 0%, rgba(255, 50, 50, 0.8) 50%, transparent 75%); border-radius: 50%; animation: mouth-talking 0.12s ease-in-out infinite; z-index: 15; pointer-events: none; box-shadow: 0 0 25px rgba(255, 100, 100, 0.9), 0 0 50px rgba(255, 150, 150, 0.6); opacity: 0.95; }
+    @keyframes mouth-talking { 0%, 100% { height: 12px; opacity: 0.85; transform: translateX(-50%) scaleY(1); } 50% { height: 22px; opacity: 1; transform: translateX(-50%) scaleY(1.4); } }
+    
+    #hologram-god.talking.krishna-active #god-image { filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.95)) drop-shadow(0 0 80px rgba(30, 58, 138, 0.85)); }
+    #hologram-god.talking.krishna-active #god-image::after { background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.95) 0%, rgba(30, 58, 138, 0.85) 50%, transparent 75%); box-shadow: 0 0 30px rgba(251, 191, 36, 0.95), 0 0 60px rgba(30, 58, 138, 0.7); }
+    #hologram-god.talking.shiva-active #god-image { filter: drop-shadow(0 0 40px rgba(78, 205, 196, 0.95)) drop-shadow(0 0 80px rgba(44, 62, 80, 0.85)); }
+    #hologram-god.talking.shiva-active #god-image::after { background: radial-gradient(ellipse at center, rgba(78, 205, 196, 0.95) 0%, rgba(44, 62, 80, 0.85) 50%, transparent 75%); box-shadow: 0 0 30px rgba(78, 205, 196, 0.95), 0 0 60px rgba(44, 62, 80, 0.7); }
+    
+    #reaction-bubble { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ffd700, #ff6b6b); color: #1a1a3a; padding: 10px 20px; border-radius: 25px; font-weight: 600; display: none; z-index: 1000; max-width: 220px; text-align: center; }
+    #reaction-bubble.show { display: block; animation: pop-in-bounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    @keyframes pop-in-bounce { 0% { opacity: 0; transform: translateX(-50%) scale(0.5) translateY(20px); } 50% { transform: translateX(-50%) scale(1.1) translateY(-5px); } 100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); } }
+    
+    #control-panel { padding: 20px; margin: 10px; background: var(--glass); border-radius: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(20px); }
+    
+    #voice-settings { margin: 15px 0; padding: 15px; background: rgba(155, 89, 182, 0.2); border-radius: 12px; border: 1px solid rgba(155, 89, 182, 0.4); display: none; }
+    #voice-settings label { display: block; margin-bottom: 8px; color: #d2b4de; font-weight: 600; font-size: 0.95rem; }
+    #voice-gender { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(155, 89, 182, 0.5); background: rgba(30,30,60,0.9); color: white; font-family: inherit; font-size: 0.95rem; }
+    
+    #user-query { width: 100%; min-height: 60px; padding: 12px; border-radius: 12px; border: 2px solid var(--glass-border); background: rgba(15,15,35,0.9); color: white; font-size: 1rem; margin-bottom: 10px; font-family: inherit; transition: all 0.3s ease; }
+    #user-query:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15); }
+    
+    .btn { padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; color: white; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease; }
+    #send-btn { background: linear-gradient(135deg, #4ecdc4, #44a08d); }
+    #send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    #voice-btn { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+    #voice-btn.listening { animation: pulse-red 1.5s infinite; background: #ff4757; }
+    @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4); } 50% { box-shadow: 0 0 0 12px rgba(255, 71, 87, 0); } }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+    
+    #response-area { margin-top: 15px; padding: 15px; background: rgba(30,30,60,0.7); border-radius: 12px; border-left: 4px solid var(--primary); display: none; }
+    #response-area.show { display: block; animation: slideUp 0.4s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    #god-response { line-height: 1.6; margin-bottom: 10px; font-size: 1rem; }
+    #god-response em { color: var(--accent); font-style: normal; }
+    
+    footer { text-align: center; padding: 15px; color: #666; font-size: 0.8rem; }
+    
+    @media (max-width: 480px) {
+      #hologram-god { width: 180px; height: 250px; }
+      header h1 { font-size: 1.4rem; }
+      #hologram-god.talking #god-image::after { width: 40px; height: 14px; bottom: 20%; }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      #hologram-god.talking, #hologram-god.talking #god-image, #hologram-god.talking #god-image::after, #reaction-bubble.show { animation: none !important; }
+      #hologram-god.talking #god-image { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.9)); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-om"></i> Divine AI</h1>
+    <p>TV Serial Style Talking Gods ✨</p>
+  </header>
+  
+  <div class="god-chips">
+    <div class="god-chip active" data-god="cosmic">🌌 Cosmic</div>
+    <div class="god-chip" data-god="shiva">🕉️ Shiva</div>
+    <div class="god-chip" data-god="krishna">🦚 Krishna</div>
+    <div class="god-chip" data-god="vishnu">🪷 Vishnu</div>
+    <div class="god-chip" data-god="durga">🦁 Durga</div>
+    <div class="god-chip" data-god="ganesh">🐘 Ganesh</div>
+  </div>
+  
+  <div id="god-stage">
+    <div id="hologram-god">
+      <img id="god-image" src="" alt="Divine Form" />
+      <video id="god-video" playsinline muted preload="auto"></video>
+    </div>
+  </div>
+  
+  <div id="reaction-bubble">🙏</div>
+
+  <div id="control-panel">
+    <button id="toggle-voice-settings" class="btn" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); margin-bottom: 10px;">
+      <i class="fas fa-voice"></i> Voice Settings
+    </button>
+    
+    <div id="voice-settings">
+      <label><i class="fas fa-mars-venus"></i> Voice Type:</label>
+      <select id="voice-gender">
+        <option value="male">👨 Male (Deep)</option>
+        <option value="female">👩 Female (Sweet)</option>
+        <option value="divine" selected>🕉️ Divine (Auto)</option>
+      </select>
+    </div>
+
+    <textarea id="user-query" placeholder="🙏 Apna prashn likhiye..."></textarea>
+    <button id="voice-btn" class="btn"><i class="fas fa-microphone"></i> Sunna</button>
+    <button id="send-btn" class="btn"><i class="fas fa-paper-plane"></i> Bhejiye</button>
+    
+    <div id="response-area">
+      <div id="god-response"></div>
+      <button id="speak-response" class="btn" style="background: linear-gradient(135deg, #a29bfe, #6c5ce7);"><i class="fas fa-volume-high"></i> Suniye</button>
+    </div>
+  </div>
+  
+  <footer>Divine AI © 2024 | Radhe Radhe 🦚</footer>
+
+  <script>
+    // ✅ Initialize vConsole for mobile debugging
+    var vConsole = new VConsole();
+    console.log("✅ Divine AI Loaded!");
+    
+    // === GOD & VOICE CONFIGURATION ===
+    const GODS = {
+      cosmic: { name: 'Cosmic Guide', image: '/assets/gods/cosmic.png' },
+      shiva: { name: 'Lord Shiva', image: '/assets/gods/shiva.png' },
+      krishna: { name: 'Shri Krishna', image: '/assets/gods/krishna.png' },
+      vishnu: { name: 'Lord Vishnu', image: '/assets/gods/vishnu.png' },
+      durga: { name: 'Maa Durga', image: '/assets/gods/durga.png' },
+      ganesh: { name: 'Lord Ganesh', image: '/assets/gods/ganesh.png' }
+    };
+    
+    const VOICE_MAP = {
+      male: {
+        shiva: 'pNInz6obpgDQGcFmaJgB', krishna: 'TxGEqnHWrfWFTfGW9XjX',
+        vishnu: 'AZnzlk1XvdvUeBnXmlld', durga: 'EXAVITQu4vr4xnSDxMaL',
+        ganesh: 'MF3mGyEYCl7XYWbV9V6O', cosmic: '21m00Tcm4TlvDq8ikWAM'
+      },
+      female: {
+        shiva: 'AZnzlk1XvdvUeBnXmlld', krishna: 'TxGEqnHWrfWFTfGW9XjX',
+        vishnu: 'EXAVITQu4vr4xnSDxMaL', durga: '21m00Tcm4TlvDq8ikWAM',
+        ganesh: 'MF3mGyEYCl7XYWbV9V6O', cosmic: '21m00Tcm4TlvDq8ikWAM'
+      },
+      divine: {
+        shiva: 'pNInz6obpgDQGcFmaJgB', krishna: 'TxGEqnHWrfWFTfGW9XjX',
+        vishnu: 'AZnzlk1XvdvUeBnXmlld', durga: 'EXAVITQu4vr4xnSDxMaL',
+        ganesh: 'MF3mGyEYCl7XYWbV9V6O', cosmic: '21m00Tcm4TlvDq8ikWAM'
+      }
+    };
+    
+    let currentGod = 'cosmic';
+    let currentVoiceGender = 'divine';
+    
+    // DOM Elements
+    const hologramGod = document.getElementById('hologram-god');
+    const godImage = document.getElementById('god-image');
+    const godVideo = document.getElementById('god-video');
+    const reactionBubble = document.getElementById('reaction-bubble');
+    const sendBtn = document.getElementById('send-btn');
+    const voiceBtn = document.getElementById('voice-btn');
+    const userQuery = document.getElementById('user-query');
+    const responseArea = document.getElementById('response-area');
+    const godResponse = document.getElementById('god-response');
+    const speakBtn = document.getElementById('speak-response');
+    const toggleVoiceSettings = document.getElementById('toggle-voice-settings');
+    const voiceGenderSelect = document.getElementById('voice-gender');
+    
+    function showReaction(text) {
+      if (reactionBubble) {
+        reactionBubble.textContent = text;
+        reactionBubble.classList.add('show');
+        setTimeout(() => { if (reactionBubble) reactionBubble.classList.remove('show'); }, 3000);
+      }
+    }
+    
+    function getVoiceId(godKey, gender) {
+      return VOICE_MAP[gender]?.[godKey] || VOICE_MAP.divine[godKey] || '21m00Tcm4TlvDq8ikWAM';
+    }
+    
+    function selectGod(godKey) {
+      if (!GODS[godKey]) godKey = 'cosmic';
+      currentGod = godKey;
+      const god = GODS[godKey];
+      
+      document.querySelectorAll('.god-chip').forEach(chip => chip.classList.remove('active'));
+      document.querySelector(`[data-god="${godKey}"]`)?.classList.add('active');
+      
+      if (godImage && hologramGod) {
+        godImage.src = god.image;
+        godImage.style.display = 'block';
+        if (godVideo) { godVideo.style.display = 'none'; godVideo.src = ''; }
+        hologramGod.classList.remove('visible', 'krishna-active', 'shiva-active', 'talking');
+        void hologramGod.offsetWidth;
+        hologramGod.classList.add('visible');
+        if (godKey === 'krishna') hologramGod.classList.add('krishna-active');
+        else if (godKey === 'shiva') hologramGod.classList.add('shiva-active');
+        console.log(`✅ Showing ${god.name}`);
+      }
+      showReaction(`🙏 ${god.name}`);
+    }
+    
+    document.querySelectorAll('.god-chip').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        const godKey = e.currentTarget.dataset.god;
+        if (godKey) selectGod(godKey);
+      });
+    });
+    
+    if (toggleVoiceSettings) {
+      toggleVoiceSettings.addEventListener('click', () => {
+        const panel = document.getElementById('voice-settings');
+        if (panel) {
+          panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+          toggleVoiceSettings.innerHTML = panel.style.display === 'none' 
+            ? '<i class="fas fa-voice"></i> Voice Settings' 
+            : '<i class="fas fa-chevron-up"></i> Hide Voice Settings';
+        }
+      });
+    }
+    
+    if (voiceGenderSelect) {
+      voiceGenderSelect.addEventListener('change', (e) => {
+        currentVoiceGender = e.target.value;
+        showReaction(`🔊 Voice: ${e.target.options[e.target.selectedIndex].text}`);
+      });
+    }
+    
+    function startTalkingAnimation() {
+      if (hologramGod) { hologramGod.classList.add('talking'); console.log("🎬 Talking started"); }
+    }
+    function stopTalkingAnimation() {
+      if (hologramGod) { hologramGod.classList.remove('talking'); console.log("🎬 Talking stopped"); }
+    }
+    
+    // ✅ Browser Speech Fallback (Free & Unlimited)
+    function speakUsingBrowser(text) {
+      console.log("🔄 Using Browser Speech Fallback");
+      showReaction("🔊 Phone Voice (Fallback)");
+      
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Stop any ongoing speech
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'hi-IN'; // Hindi
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        
+        utterance.onstart = () => startTalkingAnimation();
+        utterance.onend = () => {
+          stopTalkingAnimation();
+          showReaction("✨ Aashirwaad");
+        };
+        utterance.onerror = () => {
+          stopTalkingAnimation();
+          showReaction("⚠️ Voice error");
+        };
+        
+        window.speechSynthesis.speak(utterance);
+      } else {
+        showReaction("⚠️ Voice not supported");
+        stopTalkingAnimation();
+      }
+    }
+    
+    // ✅ Audio Playback Function (ElevenLabs + Fallback)
+    async function playAudioWithAnimation(audioBase64) {
+      if (!audioBase64) {
+        console.error("❌ No audio data received!");
+        showReaction("⚠️ No audio");
+        return;
+      }
+      
+      console.log("🎵 Audio received, length:", audioBase64.length);
+      
+      // Stop previous audio
+      if (window.currentAudio) {
+        window.currentAudio.pause();
+        window.currentAudio = null;
+      }
+      
+      // Create audio element
+      const audio = new Audio();
+      
+      // Check if it's already a data URI
+      if (audioBase64.startsWith('data:')) {
+        audio.src = audioBase64;
+        console.log("✅ Using data URI format");
+      } else if (audioBase64.startsWith('audio/')) {
+        audio.src = 'data:' + audioBase64;
+        console.log("✅ Added data: prefix");
+      } else {
+        // Assume it's raw base64
+        audio.src = 'data:audio/mpeg;base64,' + audioBase64;
+        console.log("✅ Added full data URI prefix");
+      }
+      
+      window.currentAudio = audio;
+      audio.volume = 0.9;
+      audio.preload = 'auto';
+      
+      // Start animation
+      startTalkingAnimation();
+      showReaction("🔊 Bol rahe hain...");
+      
+      // Event listeners
+      audio.onended = () => {
+        console.log("✅ Audio playback completed");
+        stopTalkingAnimation();
+        showReaction("✨ Aashirwaad");
+        window.currentAudio = null;
+      };
+      
+      audio.onerror = (e) => {
+        console.error("❌ Audio error:", e);
+        stopTalkingAnimation();
+        showReaction("⚠️ Audio error");
+        window.currentAudio = null;
+      };
+      
+      audio.oncanplaythrough = () => {
+        console.log("✅ Audio can play through, duration:", audio.duration);
+      };
+      
+      // Try to play
+      try {
+        console.log("🎵 Attempting to play audio...");
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+          await playPromise;
+          console.log("✅ Audio playing successfully!");
+        }
+      } catch (error) {
+        console.error("❌ Play failed:", error);
+        showReaction("⚠️ Play blocked");
+        stopTalkingAnimation();
+      }
+    }
+    
+    if (sendBtn) {
+      sendBtn.addEventListener('click', async () => {
+        const query = userQuery ? userQuery.value.trim() : '';
+        if (!query) { showReaction('⚠️ Pehle prashn likhiye'); return; }
+        
+        showReaction('✨ Bhej rahe...');
+        if (responseArea) responseArea.classList.add('show');
+        if (godResponse) godResponse.innerHTML = '<em>Divine wisdom aa rahi hai...</em>';
+        if (sendBtn) sendBtn.disabled = true;
+        
+        try {
+          // Step 1: Get chat reply
+          const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: query,
+              system_prompt: `You are ${GODS[currentGod].name}. Answer in Hindi with divine wisdom.`
+            })
+          });
+          
+          if (!response.ok) throw new Error(`Server error: ${response.status}`);
+          
+          const data = await response.json();
+          if (godResponse) godResponse.textContent = data.reply || "Kuch gadbad ho gayi";
+          
+          // Step 2: Get TTS audio
+          showReaction('🔊 Generating voice...');
+          const ttsResponse = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              text: data.reply,
+              voice_id: getVoiceId(currentGod, currentVoiceGender)
+            })
+          });
+          
+          const ttsData = await ttsResponse.json();
+          console.log("📦 TTS Response:", ttsData);
+          
+          if (ttsResponse.status === 401 || ttsResponse.status === 403 || ttsData.error) {
+            console.warn("⚠️ ElevenLabs failed, using fallback");
+            showReaction("⚠️ Using Phone Voice");
+            // ✅ FALLBACK: Use Browser Speech
+            speakUsingBrowser(data.reply);
+          } else if (ttsData.audio) {
+            // ✅ Success: Use ElevenLabs Audio
+            await playAudioWithAnimation(ttsData.audio);
+          } else {
+            showReaction("⚠️ No audio in response");
+          }
+          
+        } catch (error) {
+          console.error("Error:", error);
+          if (godResponse) godResponse.textContent = `⚠️ Error: ${error.message}`;
+          showReaction('⚠️ Server Error');
+        } finally {
+          if (sendBtn) sendBtn.disabled = false;
+          if (userQuery) userQuery.value = '';
+        }
+      });
+    }
+    
+    if (voiceBtn) {
+      voiceBtn.addEventListener('click', () => {
+        showReaction('🎤 Sun raha hoon...');
+      });
+    }
+    
+    if (speakBtn) {
+      speakBtn.addEventListener('click', async () => {
+        const text = godResponse?.textContent || '';
+        if (!text) return;
+        
+        showReaction('🔊 Generating voice...');
+        try {
+          const ttsResponse = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              text: text,
+              voice_id: getVoiceId(currentGod, currentVoiceGender)
+            })
+          });
+          const ttsData = await ttsResponse.json();
+          
+          if (ttsResponse.status === 401 || ttsResponse.status === 403 || ttsData.error) {
+            speakUsingBrowser(text);
+          } else if (ttsData.audio) {
+            await playAudioWithAnimation(ttsData.audio);
+          }
+        } catch (e) {
+          console.error("TTS Error:", e);
+          speakUsingBrowser(text); // Fallback on error
+        }
+      });
+    }
+    
+    // Auto-load first god
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log("🚀 Page loaded, initializing...");
+      selectGod('cosmic');
+      console.log("✅ Hologram visible!");
+    });
+  </script>
+</body>
+</html>
